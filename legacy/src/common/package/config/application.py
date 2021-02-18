@@ -9,7 +9,7 @@
 # HTTP Port for web streaming
 HTTP_PORT = 8000
 # HTTP page template path
-HTML_TEMPLATE_PATH = './src/common/package/http/template/'
+HTML_TEMPLATE_PATH = '/home/pi/Project/frames-client/src/common/package/http/template/'
 
 # Capturing device index (used for web camera)
 CAPTURING_DEVICE = 0

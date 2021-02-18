@@ -7,15 +7,15 @@
 # OpenCV configuration
 
 # Haar cascade
-HAARCASCADE_FRONTALFACE_DEFAULT_PATH = './src/opencv/cascade' \
+HAARCASCADE_FRONTALFACE_DEFAULT_PATH = '/home/pi/Project/frames-client/src/opencv/cascade' \
                                        '/haarcascade_frontalface_default.xml'
 
 # Caffe deploy Prototxt
-PROTOTEXT_PATH = './src/opencv/dnn/prototxt' \
+PROTOTEXT_PATH = '/home/pi/Project/frames-client/src/opencv/dnn/prototxt' \
                  '/deploy.prototxt.txt'
 
 # Caffe model
-MODEL_PATH = './src/opencv/dnn/model' \
+MODEL_PATH = '/home/pi/Project/frames-client/src/opencv/dnn/model' \
              '/res10_300x300_ssd_iter_140000.caffemodel'
 
 # Default confidence
