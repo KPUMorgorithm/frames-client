@@ -62,7 +62,7 @@ class FaceMatcher:
         _, img_encoded = cv2.imencode('.jpg', frame)
         print('encoding time :', time.time() - t)
         t = time.time()
-        res = requests.post('http://127.0.0.1:5000/match', data=img_encoded.tostring(), headers={'content-type': 'image/jpeg'})
+        res = requests.post('http://192.168.0.30:5000/match', data=img_encoded.tostring(), headers={'content-type': 'image/jpeg'})
         print('request time :', time.time() - t)
 
         self.faces = res.json()['data']
