@@ -3,7 +3,7 @@ import time
 import requests
 import threading
 
-REQ_TICK = 10 # 요청 tick
+REQ_TICK = 50 # 요청 tick
 class Camera:
     def __init__(self, winname, cam=cv2.VideoCapture(0)):
         self.winname = winname
