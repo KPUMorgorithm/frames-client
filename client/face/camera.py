@@ -3,14 +3,15 @@ import time
 import requests
 import threading
 
-REQ_TICK = 10 # 요청 tick
+REQ_TICK = 50 # 요청 tick
 class Camera:
-    def __init__(self, winname, cam=cv2.VideoCapture(0)):
+    def __init__(self, winname, tick, ip, cam=cv2.VideoCapture(0)):
         self.winname = winname
         self.cam = cam
         self.started = False
-        self.faceMatcher = FaceMatcher()
+        self.faceMatcher = FaceMatcher(ip)
         self.frame = None
+        self.tick = tick
 
     def start(self):
         self.started = True
@@ -26,7 +27,7 @@ class Camera:
         cv2.rectangle(self.frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(self.frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-        
+
     def _run(self):
         tick = 0
         while self.started:
@@ -37,7 +38,7 @@ class Camera:
 
             # --- TODO : 다른 쓰레드로 분리해야함 ---
 
-            if tick % REQ_TICK == 0:
+            if tick % self.tick == 0:
                 self.faceMatcher.feature(self.frame)
                 tick = 0
             tick += 1
@@ -51,9 +52,9 @@ class Camera:
                 break
 
 class FaceMatcher:
-    def __init__(self):
+    def __init__(self, ip):
         self.faces = []
-
+        self.ip = ip
     def feature(self, frame):
         threading.Thread(target=self._feature, args=(frame,)).start()
 
@@ -62,7 +63,7 @@ class FaceMatcher:
         _, img_encoded = cv2.imencode('.jpg', frame)
         print('encoding time :', time.time() - t)
         t = time.time()
-        res = requests.post('http://127.0.0.1:5000/match', data=img_encoded.tostring(), headers={'content-type': 'image/jpeg'})
+        res = requests.post(self.ip, data=img_encoded.tostring(), headers={'content-type': 'image/jpeg'})
         print('request time :', time.time() - t)
 
         self.faces = res.json()['data']
