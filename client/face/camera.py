@@ -3,13 +3,12 @@ import time
 import requests
 import threading
 
-REQ_TICK = 50 # 요청 tick
 class Camera:
-    def __init__(self, winname, tick, ip, cam=cv2.VideoCapture(0)):
+    def __init__(self, winname, tick, ip, timeout , cam=cv2.VideoCapture(0)):
         self.winname = winname
         self.cam = cam
         self.started = False
-        self.faceMatcher = FaceMatcher(ip)
+        self.faceMatcher = FaceMatcher(ip, timeout)
         self.frame = None
         self.tick = tick
 
@@ -52,9 +51,11 @@ class Camera:
                 break
 
 class FaceMatcher:
-    def __init__(self, ip):
+    def __init__(self, ip, timeout):
         self.faces = []
-        self.ip = ip
+        self.__ip = ip
+        self.__timeout = timeout
+        
     def feature(self, frame):
         threading.Thread(target=self._feature, args=(frame,)).start()
 
@@ -63,7 +64,18 @@ class FaceMatcher:
         _, img_encoded = cv2.imencode('.jpg', frame)
         print('encoding time :', time.time() - t)
         t = time.time()
-        res = requests.post(self.ip, data=img_encoded.tostring(), headers={'content-type': 'image/jpeg'})
-        print('request time :', time.time() - t)
-
-        self.faces = res.json()['data']
+        
+        try:
+            res = requests.post(self.__ip, 
+                            data=img_encoded.tostring(), 
+                            headers={'content-type': 'image/jpeg'},
+                            timeout=self.__timeout)
+            
+            print('request time :', time.time() - t)
+            self.faces = res.json()['data']
+        
+        except requests.exceptions.Timeout:
+            print(threading.get_ident()," Time Out")
+            return
+        
+        
