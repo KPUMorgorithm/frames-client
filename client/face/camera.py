@@ -2,6 +2,7 @@ import cv2
 import time
 import requests
 import threading
+import numpy as np
 
 class Camera:
     def __init__(self, winname, tick, ip, timeout , cam=cv2.VideoCapture(0)):
@@ -20,13 +21,29 @@ class Camera:
     def stop(self):
         self.started = False
 
-    def draw(self, name, face_location):
+    def draw(self, isMask, name, face_location):
+        ''' 사각형그리는거
         (top, right, bottom, left) = face_location
         cv2.rectangle(self.frame, (left, top), (right, bottom), (0, 0, 255), 2)
         cv2.rectangle(self.frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(self.frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        '''
 
+        (heigth, width) = np.shape(self.frame)[:2]
+        font = cv2.FONT_HERSHEY_DUPLEX
+
+        cv2.rectangle(self.frame, (0,heigth-50), (width,heigth), (0,0,0), cv2.FILLED)
+        
+        # 한글 인코딩 해야됨
+        if isMask:
+            name = "Take Off The Mask"
+        
+        textSize = cv2.getTextSize(name, font, 1, 1)[0]
+        textX = int( (width - textSize[0]) / 2 ) 
+        textY = int( (heigth -25 ) + textSize[1] / 2 )
+
+        cv2.putText(self.frame, name, (textX,textY), font, 1.0, (255,255,255), 1)
+    
     def _run(self):
         tick = 0
         while self.started:
@@ -41,9 +58,9 @@ class Camera:
                 self.faceMatcher.feature(self.frame)
                 tick = 0
             tick += 1
-            for name, face_location in self.faceMatcher.faces:
-                self.draw(name, face_location)
 
+            for isMask, name, face_location in self.faceMatcher.faces:
+                self.draw(isMask, name, face_location)
             # ---------------------------------
 
             cv2.imshow(self.winname, self.frame)
