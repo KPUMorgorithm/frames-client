@@ -3,9 +3,6 @@
 #include <wiringPiSPI.h>
 #include <iterator>
 
-#define OBJECT	0xA0		// COMMAND(Read Object Temp.)
-#define SENSOR	0xA1		// COMMAND(Read Sensor Temp.)
-
 class Temperature
 {
 private:
@@ -15,7 +12,9 @@ private:
     const int spi_chn0 = 0;
     const int SPEED_1MHz = 1000000;
     const int SPI_MODE3 = 3;
-
+    const int OBJECT = 0xA0;
+    const int SENSOR = 0xA1;
+    
     int16_t SPI_COMMAND(uint8_t ADR){
 	    uint8_t Data_Buf[3];
 
