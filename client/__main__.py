@@ -16,5 +16,9 @@ def main():
                 )
     cam.start()
 
+def main2():
+    print("dd")
+
 if __name__ == "__main__":
-    main()
+    #main()
+    main2()
