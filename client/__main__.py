@@ -1,5 +1,6 @@
 from .face.camera import Camera
 import argparse
+from .gui.gui_main import Ui_Main
 
 ap = argparse.ArgumentParser()
 
@@ -17,7 +18,8 @@ def main():
     cam.start()
 
 def main2():
-    print("dd")
+    mainUi = Ui_Main(800,600)
+    mainUi.startUi()
 
 if __name__ == "__main__":
     #main()
