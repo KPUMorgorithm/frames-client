@@ -51,12 +51,12 @@ class Camera:
                 break
     
     def draw(self, isMask, name, face_location):
-        ''' 사각형그리는거
+        #사각형그리는거
         (top, right, bottom, left) = face_location
         cv2.rectangle(self.frame, (left, top), (right, bottom), (0, 0, 255), 2)
         cv2.rectangle(self.frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         cv2.putText(self.frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-        '''
+        
         (heigth, width) = np.shape(self.frame)[:2]
         if isMask:
             name = "마스크를 탈의해주세요"

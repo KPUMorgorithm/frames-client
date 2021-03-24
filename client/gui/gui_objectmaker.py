@@ -31,7 +31,7 @@ class ObjectMaker:
         return statusbar
 
 
-    def makeLabel(self,location,startX,startY,W,H,text):
+    def makeLabel(self,location,startX,startY,W,H,text=""):
         label = QtWidgets.QLabel(location)
         label.setGeometry(QtCore.QRect(startX,startY,W,H))
         label.setObjectName(self.__makeObjectName("label"))
