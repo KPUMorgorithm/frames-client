@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
-from client.face.face_matcher import FaceMatcher
+from .face_matcher import FaceMatcher
 
 class Camera:
     def __init__(self, winname, tick, ip, timeout , cam=cv2.VideoCapture(0)):
@@ -11,7 +11,7 @@ class Camera:
         self.faceMatcher = FaceMatcher(ip, timeout)
         self.frame = None
         self.tick = tick
-
+        
     def start(self):
         self.started = True
         self._run()
@@ -19,6 +19,12 @@ class Camera:
 
     def stop(self):
         self.started = False
+
+    def getWH(self):
+        ret, frame = self.cam.read()
+        if not ret: return None
+
+        return np.shape(frame)[:2] #return h,w
 
     def _run(self):
         tick = 0
