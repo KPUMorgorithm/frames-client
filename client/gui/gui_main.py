@@ -4,12 +4,13 @@ from .gui_objectmaker import ObjectMaker
 
 MAINWINDOW = "MainWindow"
 TRANSLATE = QtCore.QCoreApplication.translate
+TICK = 100
 
 OM = ObjectMaker(MAINWINDOW, TRANSLATE)
 
 class Ui_Main(object):
 
-    def __init__(self,W,H):
+    def __init__(self, W, H):
         
         super().__init__()
         self.__app = QtWidgets.QApplication(sys.argv)
@@ -24,24 +25,40 @@ class Ui_Main(object):
         self.statusbar = OM.makeStatusBar(self.__MainWindow)
 
         # SetUp Ui
-        self.setupUi()
+        self.setupTemperature(W,H)
 
         QtCore.QMetaObject.connectSlotsByName(self.__MainWindow)
 
-
-    def setupUi(self):
-        
+    def setupVideo(W,H):
+        print("TODO")
         #TODO: CameraImage input
         #self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
         #self.graphicsView.setGeometry(QtCore.QRect(10, 10, 512, 512))
         #self.graphicsView.setObjectName("graphicsView")
 
-        # Temperature Frame
-        self.FR_TEMP = OM.makeFrame(self.__centralwidget, 530, 10, 261, 181)
+    def setupTemperature(self,W,H):
         
-        self.LB_TEMP_Main = OM.makeLabel(self.FR_TEMP,110,10,56,12,"체온측정")
-        self.LB_TEMP_Value = OM.makeLabel(self.FR_TEMP,30, 40, 56 ,12, "Value")
-        self.LB_TEMP_Status = OM.makeLabel(self.FR_TEMP, 170, 40, 56, 12, "Status")
+        half_W = int(W / 2)
+        half_H = int(H / 2)
+        tick_W = int(W / TICK)
+        tick_H = int(H / TICK)
+
+        frame_W = half_W - 2 * (tick_W)
+        frame_H = 29 * tick_H
+        
+        # Temperature Frame
+        self.FR_TEMP = OM.makeFrame(self.__centralwidget, 
+            startX = half_W + tick_W, 
+            startY = tick_H, 
+            W = frame_W, 
+            H = frame_H)
+        
+        self.LB_TEMP_Main = OM.makeLabel(self.FR_TEMP,
+            frame_W/2 - 28, tick_H, 56, 12, "체온측정")
+        self.LB_TEMP_Value = OM.makeLabel(self.FR_TEMP,
+            tick_W, 3 * tick_H + 12, 56 ,12, "Value")
+        self.LB_TEMP_Status = OM.makeLabel(self.FR_TEMP, 
+            tick_W, 5 * tick_H + 12, 56, 12, "Status")
 
         
 
