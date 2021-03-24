@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+from client.video.video import Video
 from .gui_objectmaker import ObjectMaker
+import threading
 
 MAINWINDOW = "MainWindow"
 TRANSLATE = QtCore.QCoreApplication.translate
@@ -27,14 +29,42 @@ class Ui_Main(object):
         # SetUp Ui
         self.setupTemperature(W,H)
 
+        self.vd, th = self.setupVideo(W,H)
+        th.start()
+
         QtCore.QMetaObject.connectSlotsByName(self.__MainWindow)
 
-    def setupVideo(W,H):
-        print("TODO")
-        #TODO: CameraImage input
-        #self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        #self.graphicsView.setGeometry(QtCore.QRect(10, 10, 512, 512))
-        #self.graphicsView.setObjectName("graphicsView")
+
+    def startUi(self):
+        
+        self.__MainWindow.show()
+        sys.exit(self.__app.exec_())
+
+
+    def setupVideo(self,W,H):
+        half_W = int(W / 2)
+        half_H = int(H / 2)
+        tick_W = int(W / TICK)
+        tick_H = int(H / TICK)
+
+        size = half_W - 2 * (tick_W)
+
+        self.FR_Camera = OM.makeFrame(self.__centralwidget,
+            startX= tick_W,
+            startY = tick_H,
+            W = size,
+            H = size)
+
+        self.LB_Camera_Main = OM.makeLabel(self.FR_Camera,
+            0,0,size,size)
+
+        vd = Video(self.LB_Camera_Main)
+        vd.setRunning(True)
+
+        th = threading.Thread(target=vd.run)
+
+        return vd, th
+
 
     def setupTemperature(self,W,H):
         
@@ -62,8 +92,4 @@ class Ui_Main(object):
 
         
 
-    def startUi(self):
-        
-        self.__MainWindow.show()
-        sys.exit(self.__app.exec_())
 
