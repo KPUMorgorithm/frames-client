@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
-from client.face.face_matcher import FaceMatcher
+from .face_matcher import FaceMatcher
 
 class Camera:
     def __init__(self, winname, tick, ip, timeout , cam=cv2.VideoCapture(0)):
@@ -11,7 +11,7 @@ class Camera:
         self.faceMatcher = FaceMatcher(ip, timeout)
         self.frame = None
         self.tick = tick
-
+        
     def start(self):
         self.started = True
         self._run()
@@ -19,6 +19,12 @@ class Camera:
 
     def stop(self):
         self.started = False
+
+    def getWH(self):
+        ret, frame = self.cam.read()
+        if not ret: return None
+
+        return np.shape(frame)[:2] #return h,w
 
     def _run(self):
         tick = 0
@@ -45,12 +51,12 @@ class Camera:
                 break
     
     def draw(self, isMask, name, face_location):
-        ''' 사각형그리는거
+        #사각형그리는거
         (top, right, bottom, left) = face_location
         cv2.rectangle(self.frame, (left, top), (right, bottom), (0, 0, 255), 2)
         cv2.rectangle(self.frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         cv2.putText(self.frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-        '''
+        
         (heigth, width) = np.shape(self.frame)[:2]
         if isMask:
             name = "마스크를 탈의해주세요"
