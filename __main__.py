@@ -1,7 +1,6 @@
 #from .face.camera import Camera
 import argparse
-from .gui.gui_main import Ui_Main
-
+from .src.gui.gui_main import Ui_Main
 ap = argparse.ArgumentParser()
 
 ap.add_argument("-t", "--tick", default=50, help="밀리초 단위로 서버에 보내는 주기")

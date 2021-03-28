@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-from client.video.video import Video
+from ..video.video import Video
+from ..requests.requests import Request
 from .gui_objectmaker import ObjectMaker
 import threading
 
@@ -29,8 +30,13 @@ class Ui_Main(object):
         # SetUp Ui
         self.setupTemperature(W,H)
 
+        # Video
         self.vd, th = self.setupVideo(W,H)
         th.start()
+
+        #Request
+        self.req, reqTh = self.setupRequest(W,H, self.vd)
+        reqTh.start()
 
         QtCore.QMetaObject.connectSlotsByName(self.__MainWindow)
 
@@ -90,6 +96,29 @@ class Ui_Main(object):
         self.LB_TEMP_Status = OM.makeLabel(self.FR_TEMP, 
             tick_W, 5 * tick_H + 12, 56, 12, "Status")
 
-        
+    def setupRequest(self,W,H,vd):
+
+        half_W = int(W / 2)
+        half_H = int(H / 2)
+        tick_W = int(W / TICK)
+        tick_H = int(H / TICK)
+
+        frame_W = half_W - 2 * (tick_W)
+        frame_H = 50 * tick_H
+
+        self.FR_TEMP = OM.makeFrame(self.__centralwidget, 
+        startX = half_W + tick_W, 
+        startY = H - frame_H - tick_H, 
+        W = frame_W, 
+        H = frame_H)
+
+        self.LB_TEMP_Main = OM.makeLabel(self.FR_TEMP,
+            frame_W/2 - 28, tick_H, 56, 12, "체온측정")
+
+        req = Request('http://192.168.0.30:5000/match', 3, vd)
+
+        th = threading.Thread(target=req.sendRequest)
+
+        return req, th
 
 
