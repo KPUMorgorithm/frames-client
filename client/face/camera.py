@@ -12,12 +12,12 @@ class Camera:
         self.frame = None
         self.tick = tick
         
-    def start(self):
+    def start(self):#
         self.started = True
         self._run()
         # threading.Thread(target=self._run, args=()).start()
 
-    def stop(self):
+    def stop(self):#
         self.started = False
 
     def getWH(self):

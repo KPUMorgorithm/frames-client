@@ -26,4 +26,5 @@ class FaceMatcher:
         except requests.exceptions.Timeout:
             print(threading.get_ident()," Time Out")
             return
-        
+    
+    
