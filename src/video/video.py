@@ -8,13 +8,14 @@ class Video:
         self.size = label.width()
         self.frame = None
         self.cam = cam
+        self.th = None
         self.running = False
+
 
     def start(self):
         self.running = True
-        th = threading.Thread(target=self.__run)
-        th.start()
-        self.__run()
+        self.th = threading.Thread(target=self.run)
+        self.th.start()
 
     def stop(self):
         self.running = False
