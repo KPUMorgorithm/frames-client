@@ -4,12 +4,18 @@ import threading
 import time
 
 class Request:
-    def __init__(self, ip, timeout, vd):
+    def __init__(self, ip, timeout, vd, tp):
         self.__ip = ip
         self.__timeout = timeout
         self.__vd = vd
+        self.__tp = tp
+        self.th = None
     
     def sendRequest(self):
+        self.th = threading.Thread(target=self._sendRequest)
+        self.th.start()
+
+    def _sendRequest(self):
         try:
             _, img_encoded = cv2.imencode('.jpg', self.__vd.getFrame())
 
@@ -27,6 +33,7 @@ class Request:
             for isMask, name, face_location in req:
                 ## Something TODO
                 print(name)
+                self._sendDataLog(name)
                 
             time.sleep(3)
 
@@ -39,3 +46,17 @@ class Request:
 
         finally:
             threading.Timer(3,self.sendRequest).start()
+    
+    def _sendDataLog(self, name):
+        data = {"temperature" : self.__tp.checkTemperature(),
+                "name" : name,
+                "memberNum" : 1,
+                "facilityNum" : 1,
+                "state" : 1
+                }
+        res = requests.post('http://192.168.0.30:5000/addLog',
+                            data = data)
+        
+        req = res.json()['log']
+
+        print(req)
