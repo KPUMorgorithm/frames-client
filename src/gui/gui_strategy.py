@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
-class ObjectMaker:
+class GuiStrategy:
 
     def __init__(self, crtWindow, translate):
         self.__crtWindow = crtWindow
