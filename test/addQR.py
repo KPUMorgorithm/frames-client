@@ -4,19 +4,23 @@
 # 3. WAS에서 회원 등록과 로그 등록을 수행함
 
 
-# pip install qpcode
+# pip install qrcode
 
-import qrcode
+import pyqrcode
 
 def testReceiveQR():
     testInput = "https://www.naver.com/"
 
-    img = QRHandler.conversionURLtoQR(testInput)
-    img.save('test.jpg')
-
+    QRHandler.conversionURLtoImg(testInput)
+    #img.save('test.jpg')
+#https://pythonhosted.org/PyQRCode/rendering.html
 class QRHandler:
 
     @staticmethod
     def conversionURLtoImg(url):
-        img = qrcode.make(url)
-        return img
+        img = pyqrcode.create(url)
+        img.svg('uca-url.svg', scale=8)
+        img.eps('uca-url.eps', scale=2)
+        print(img.terminal(quiet_zone=1))
+
+testReceiveQR()
