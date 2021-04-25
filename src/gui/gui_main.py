@@ -3,31 +3,95 @@ import sys
 from ..video.video import Video
 from ..requests.requests import Request
 from ..temperature.temperature import Temperature
-from .gui_strategy import GuiStrategy
+from .gui_builder import GuiBuilder
 import threading
 
 MAINWINDOW = "MainWindow"
 TRANSLATE = QtCore.QCoreApplication.translate
 TICK = 100
 
+class VideoLabel(QtWidgets.QLabel):
+
+    def __init__(self, *args, **kwargs):
+        super(VideoLabel, self).__init__(*args, **kwargs)
+        self.tp = Temperature("client/src/temperature/temperature.dll")
+
+    def pixmapEvent(self, pixmap):
+        qp = QtGui.QPainter(pixmap)
+        pen = QtGui.QPen(QtCore.Qt.red, 30)
+
+        tem = self.tp.checkTemperature()
+        qp.setPen(self._selectPenByTem(tem,100))
+        qp.setFont(QtGui.QFont("Arial", 30))
+        try:
+            qp.drawText(
+                pixmap.rect(), QtCore.Qt.AlignTop | QtCore.Qt.AlignRight, 
+                str(tem))
+        except:
+            pass
+        finally:
+            self.setPixmap(pixmap)
+            qp.end()
+    
+    def _selectPenByTem(self, tem, size):
+        if tem < 35:
+            color = QtCore.Qt.gray
+        elif tem < 37:
+            color = QtCore.Qt.green
+        elif tem < 37.5:
+            color = QtCore.Qt.yellow
+        else:
+            color = QtCore.Qt.red
+        
+        pen = QtGui.QPen(color, size)
+
+        return pen
+
+
+class Ui_MainWidget(QtWidgets.QWidget):
+
+    def __init__(self, W, H):
+        super().__init__()
+
+        self.__guiBuilder = GuiBuilder(MAINWINDOW, TRANSLATE)
+
+        vbox = QtWidgets.QVBoxLayout(self)
+        vbox.setContentsMargins(5,5,5,5)
+        vbox.setSpacing(5)
+
+        FR_recognition = self.__guiBuilder.makeFrame(self)
+        LB_Camera_Main = VideoLabel('asdf',self)
+        LB_Camera_Main.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
+        LB_Camera_Main.setScaledContents(True)
+
+        vbox.addWidget(LB_Camera_Main, stretch = 2)
+        vbox.addWidget(FR_recognition, stretch = 1)
+
+        self.setMinimumSize(W,H)
+        self.resize(W,H)
+
+        vd = Video(LB_Camera_Main)
+        vd.setRunning(True)
+        vd.start()
+        
 
 class Ui_Main(object):
 
     def __init__(self, W, H):
         
-        super().__init__()
+        super(Ui_Main, self).__init__()
         self.__app = QtWidgets.QApplication(sys.argv)
-
-        self.__guiStrategy = GuiStrategy(MAINWINDOW, TRANSLATE)
+        '''
+        self.__guiBuilder = GuiBuilder(MAINWINDOW, TRANSLATE)
 
         # Make MainWindow
-        self.__MainWindow = self.__guiStrategy.makeMainWindow(W,H)
+        self.__MainWindow = self.__guiBuilder.makeMainWindow(W,H)
  
         #Central Widget
-        self.__centralwidget = self.__guiStrategy.makeCentralWidget(self.__MainWindow)
+        self.__centralwidget = self.__guiBuilder.makeCentralWidget(self.__MainWindow)
 
         #StatusBar (하단)
-        self.statusbar = self.__guiStrategy.makeStatusBar(self.__MainWindow)
+        self.statusbar = self.__guiBuilder.makeStatusBar(self.__MainWindow)
 
         # Temperature
         self.tp = self.setupTemperature(W,H)
@@ -39,12 +103,14 @@ class Ui_Main(object):
         self.req = self.setupRequest(W,H, self.vd, self.tp)
 
         QtCore.QMetaObject.connectSlotsByName(self.__MainWindow)
-
+        '''
+        m = Ui_MainWidget(W,H)
+        m.show()
+        sys.exit(self.__app.exec_())
 
     def startUi(self):
-        
-        self.__MainWindow.show()
-        sys.exit(self.__app.exec_())
+        pass
+        #self.__MainWindow.show()
 
 
     def setupVideo(self,W,H):
@@ -55,13 +121,13 @@ class Ui_Main(object):
 
         size = half_W - 2 * (tick_W)
 
-        self.FR_Camera = self.__guiStrategy.makeFrame(self.__centralwidget,
+        self.FR_Camera = self.__guiBuilder.makeFrame(self.__centralwidget,
             startX= tick_W,
             startY = tick_H,
             W = size,
             H = size)
 
-        self.LB_Camera_Main = self.__guiStrategy.makeLabel(self.FR_Camera,
+        self.LB_Camera_Main = self.__guiBuilder.makeLabel(self.FR_Camera,
             0,0,size,size)
 
         vd = Video(self.LB_Camera_Main)
@@ -82,17 +148,17 @@ class Ui_Main(object):
         frame_H = 29 * tick_H
         
         # Temperature Frame
-        self.FR_TEMP = self.__guiStrategy.makeFrame(self.__centralwidget, 
+        self.FR_TEMP = self.__guiBuilder.makeFrame(self.__centralwidget, 
             startX = half_W + tick_W, 
             startY = tick_H, 
             W = frame_W, 
             H = frame_H)
         
-        self.LB_TP_Main = self.__guiStrategy.makeLabel(self.FR_TEMP,
+        self.LB_TP_Main = self.__guiBuilder.makeLabel(self.FR_TEMP,
             frame_W/2 - 28, tick_H, 56, 12, "체온측정 모듈")
-        self.LB_TP_Value = self.__guiStrategy.makeLabel(self.FR_TEMP,
+        self.LB_TP_Value = self.__guiBuilder.makeLabel(self.FR_TEMP,
             tick_W, 3 * tick_H + 12, 56 ,12, "측정 결과: ")
-        self.LB_TP_Status = self.__guiStrategy.makeLabel(self.FR_TEMP, 
+        self.LB_TP_Status = self.__guiBuilder.makeLabel(self.FR_TEMP, 
             tick_W, 5 * tick_H + 12, 56, 12, "활성화 상태: ")
         
         tp = Temperature("client/src/temperature/temperature.dll")
@@ -109,13 +175,13 @@ class Ui_Main(object):
         frame_W = half_W - 2 * (tick_W)
         frame_H = 50 * tick_H
 
-        self.FR_TEMP = self.__guiStrategy.makeFrame(self.__centralwidget, 
+        self.FR_TEMP = self.__guiBuilder.makeFrame(self.__centralwidget, 
         startX = half_W + tick_W, 
         startY = H - frame_H - tick_H, 
         W = frame_W, 
         H = frame_H)
 
-        self.LB_TEMP_Main = self.__guiStrategy.makeLabel(self.FR_TEMP,
+        self.LB_TEMP_Main = self.__guiBuilder.makeLabel(self.FR_TEMP,
             frame_W/2 - 28, tick_H, 56, 12, "체온측정")
 
         req = Request('http://192.168.0.30:5000/match', 3, vd, tp)

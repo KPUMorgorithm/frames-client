@@ -35,7 +35,7 @@ class Request:
                 print(name)
                 self._sendDataLog(name)
                 
-            time.sleep(3)
+            time.sleep(1)
 
         except requests.exceptions.Timeout as e:
             print('Error :',e,'Thread ID:',threading.get_ident()," Time Out")

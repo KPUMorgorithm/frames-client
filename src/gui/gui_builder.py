@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
-class GuiStrategy:
+class GuiBuilder:
 
     def __init__(self, crtWindow, translate):
         self.__crtWindow = crtWindow
@@ -33,15 +33,33 @@ class GuiStrategy:
 
     def makeLabel(self,location,startX,startY,W,H,text=""):
         label = QtWidgets.QLabel(location)
-        label.setGeometry(QtCore.QRect(startX,startY,W,H))
+        label.setGeometry(startX,startY,W,H)
         label.setObjectName(self.__makeObjectName("label"))
         label.setText(self.__translate(self.__crtWindow, text))
-    
+
         return label
+
+    # def makeLabel(self,location,text=""):
+    #     label = QtWidgets.QLabel(location)
+    #     label.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
+    #     label.setScaledContents(True)
+    #     label.setObjectName(self.__makeObjectName("label"))
+    #     label.setText(self.__translate(self.__crtWindow, text))
+
+    #     return label
+
+    # def makeFrame(self, location, startX, startY, W, H):
+    #     frame = QtWidgets.QFrame(location)
+    #     frame.setGeometry(QtCore.QRect(startX,startY,W,H))
+    #     frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    #     frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    #     frame.setObjectName(self.__makeObjectName("frame"))
     
-    def makeFrame(self, location, startX, startY, W, H):
+    #     return frame
+
+    def makeFrame(self, location):
         frame = QtWidgets.QFrame(location)
-        frame.setGeometry(QtCore.QRect(startX,startY,W,H))
+        frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
         frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         frame.setFrameShadow(QtWidgets.QFrame.Raised)
         frame.setObjectName(self.__makeObjectName("frame"))
