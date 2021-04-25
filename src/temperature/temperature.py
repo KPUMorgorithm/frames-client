@@ -11,13 +11,13 @@ class Temperature(object):
         self.th = None
         self._temperature = 0.0
     
-    def checkTemperature(self):
-        th = threading.Thread(target=self.runDuringWake)
-        th.start()
-        th.join()
-        return self._temperature
+    # def checkTemperature(self):
+    #     th = threading.Thread(target=self.runDuringWake)
+    #     th.start()
+    #     th.join()
+    #     return self._temperature
 
-    def _checkTemperature(self):
+    def checkTemperature(self):
         return self.lib.Temperature_check(self.obj)/100
         
     def test(self):
