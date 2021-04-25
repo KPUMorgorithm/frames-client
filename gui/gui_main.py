@@ -1,52 +1,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-from ..video.video import Video
-from ..requests.requests import Request
-from ..temperature.temperature import Temperature
+from .gui_video_label import VideoLabel
 from .gui_builder import GuiBuilder
+from ..src.video.video import Video
+from ..src.requests.requests import Request
 import threading
 
 MAINWINDOW = "MainWindow"
 TRANSLATE = QtCore.QCoreApplication.translate
 TICK = 100
-
-class VideoLabel(QtWidgets.QLabel):
-
-    def __init__(self, *args, **kwargs):
-        super(VideoLabel, self).__init__(*args, **kwargs)
-        self.tp = Temperature("client/src/temperature/temperature.dll")
-
-    def pixmapEvent(self, pixmap):
-        qp = QtGui.QPainter(pixmap)
-        pen = QtGui.QPen(QtCore.Qt.red, 30)
-
-        tem = self.tp.checkTemperature()
-        qp.setPen(self._selectPenByTem(tem,100))
-        qp.setFont(QtGui.QFont("Arial", 30))
-        try:
-            qp.drawText(
-                pixmap.rect(), QtCore.Qt.AlignTop | QtCore.Qt.AlignRight, 
-                str(tem))
-        except:
-            pass
-        finally:
-            self.setPixmap(pixmap)
-            qp.end()
-    
-    def _selectPenByTem(self, tem, size):
-        if tem < 35:
-            color = QtCore.Qt.gray
-        elif tem < 37:
-            color = QtCore.Qt.green
-        elif tem < 37.5:
-            color = QtCore.Qt.yellow
-        else:
-            color = QtCore.Qt.red
-        
-        pen = QtGui.QPen(color, size)
-
-        return pen
-
 
 class Ui_MainWidget(QtWidgets.QWidget):
 
@@ -60,9 +22,7 @@ class Ui_MainWidget(QtWidgets.QWidget):
         vbox.setSpacing(5)
 
         FR_recognition = self.__guiBuilder.makeFrame(self)
-        LB_Camera_Main = VideoLabel('asdf',self)
-        LB_Camera_Main.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
-        LB_Camera_Main.setScaledContents(True)
+        LB_Camera_Main = VideoLabel('',self)
 
         vbox.addWidget(LB_Camera_Main, stretch = 2)
         vbox.addWidget(FR_recognition, stretch = 1)
