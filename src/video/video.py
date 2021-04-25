@@ -5,7 +5,6 @@ from PyQt5 import QtGui
 class Video:
     def __init__(self, label, cam=cv2.VideoCapture(0)):
         self.label = label
-        self.size = label.width()
         self.frame = None
         self.cam = cam
         self.th = None
@@ -30,15 +29,19 @@ class Video:
         while self.running:
             
             ret, self.frame = self.cam.read()
-
+            
             if not ret:
                 print("Cannot read frame")
                 continue
-            self.frame = cv2.resize(self.frame, dsize=(self.size,self.size))
+            
+            w,h = self.label.size().width(), self.label.size().height()
+            bytePerLine = self.frame.shape[2] * w
+            
+            self.frame = cv2.resize(self.frame, dsize=(w,h))
             self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
             self.frame = cv2.flip(self.frame, 1)
 
-            qImg = QtGui.QImage(self.frame.data, 
-                self.size, self.size, QtGui.QImage.Format_RGB888)
+            qImg = QtGui.QImage(self.frame.data, w,h, bytePerLine ,QtGui.QImage.Format_RGB888)
             pixmap = QtGui.QPixmap.fromImage(qImg)
-            self.label.setPixmap(pixmap)
+            #self.label.setPixmap(pixmap)
+            self.label.pixmapEvent(pixmap)
