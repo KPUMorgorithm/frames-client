@@ -1,5 +1,6 @@
 from ..src.temperature.temperature import Temperature
 from PyQt5 import QtGui, QtWidgets, QtCore
+from ..src.video.video import Video
 
 class VideoLabel(QtWidgets.QLabel):
 
@@ -10,10 +11,14 @@ class VideoLabel(QtWidgets.QLabel):
         
         self.tp = Temperature("client/src/temperature/temperature.dll")
 
+        self.vd = Video(self)
+        self.vd.setRunning(True)
+        self.vd.start()
+
     def pixmapEvent(self, pixmap):
         qp = QtGui.QPainter(pixmap)
 
-        tem = self.tp.checkTemperature()
+        tem = self.tp.highestTemp
         qp.setPen(self._selectPenByTem(tem))
         qp.setFont(QtGui.QFont("Arial", 30))
         try:
@@ -28,6 +33,9 @@ class VideoLabel(QtWidgets.QLabel):
     
     def getTemperautre(self):
         return self.tp
+    
+    def getVideo(self):
+        return self.vd
 
     def _selectPenByTem(self, tem):
         if tem < 35:
