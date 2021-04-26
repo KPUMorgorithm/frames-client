@@ -31,22 +31,22 @@ class GuiBuilder:
         return statusbar
 
 
-    def makeLabel(self,location,startX,startY,W,H,text=""):
-        label = QtWidgets.QLabel(location)
-        label.setGeometry(startX,startY,W,H)
-        label.setObjectName(self.__makeObjectName("label"))
-        label.setText(self.__translate(self.__crtWindow, text))
-
-        return label
-
-    # def makeLabel(self,location,text=""):
+    # def makeLabel(self,location,startX,startY,W,H,text=""):
     #     label = QtWidgets.QLabel(location)
-    #     label.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
-    #     label.setScaledContents(True)
+    #     label.setGeometry(startX,startY,W,H)
     #     label.setObjectName(self.__makeObjectName("label"))
     #     label.setText(self.__translate(self.__crtWindow, text))
 
     #     return label
+
+    def makeLabel(self,location,text=""):
+        label = QtWidgets.QLabel('ddd')
+        label.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
+        label.setScaledContents(True)
+        label.setObjectName(self.__makeObjectName("label"))
+        label.setText(self.__translate(self.__crtWindow, text))
+
+        return label
 
     # def makeFrame(self, location, startX, startY, W, H):
     #     frame = QtWidgets.QFrame(location)
