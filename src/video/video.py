@@ -10,7 +10,6 @@ class Video:
         self.th = None
         self.running = False
 
-
     def start(self):
         self.running = True
         self.th = threading.Thread(target=self.run)
