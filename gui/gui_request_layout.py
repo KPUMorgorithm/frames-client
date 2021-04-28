@@ -12,7 +12,7 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         super().__init__(*args, **kwargs)
 
         self.request = Request(vd,tp)
-        self.request.reqSendFrame()
+        self.request.reqSendFrame(sendCycle=1,timeout=3)
         hBoxTop = QtWidgets.QHBoxLayout()
         hBoxBot = QtWidgets.QHBoxLayout()
 
