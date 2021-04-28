@@ -3,12 +3,17 @@ import requests
 import threading
 import time
 
+from client.setting import Config
+
+
 class Request:
     def __init__(self, vd, tp, ip='http://192.168.0.30:5000/match'):
         self.__ip = ip
         self.__vd = vd
         self.__tp = tp
-    
+        self.__config = Config()
+        
+
     def reqSendFrame(self, sendCycle, timeout):
         th = threading.Thread(target=self._reqSendFrame, args=(sendCycle,timeout))
         th.start()
@@ -20,10 +25,11 @@ class Request:
 
             file = {'frame' : ('frame.jpg', img_encoded, 'image/jpeg')}
 
+            #TODO temperature 30도 이상정도일때만 전송
             data = {
                 "temperature" : self.__tp.highestTemp,
-                "facilityNum" : 1,
-                "state" : 1
+                "facilityNum" : self.__config.getUUID(),
+                "state" : self.__config.getState()
                 }
 
             res = requests.post(self.__ip,
@@ -36,9 +42,13 @@ class Request:
             req = res.json()['data']
 
             for withoutMask, name in req:
-                #TODO: label에 표시해준다, 큐를 공유하는게 좋을 것 같다
-                print(f"withoutMask = {withoutMask}, name = {name}")
-                
+
+                if withoutMask:
+                    print(f"withoutMask = {withoutMask}, name = {name}")
+
+                else :
+                    pass
+
         except requests.exceptions.Timeout as e:
             #TODO: 서버 상태가 좋지 않음을 라벨에 공유해준다
             print('Error :',e)
