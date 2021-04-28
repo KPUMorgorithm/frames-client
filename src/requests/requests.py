@@ -4,15 +4,16 @@ import threading
 import time
 
 from client.setting import Config
-
+from client.src.requests.resultQueue import ResultQueue
 
 class Request:
-    def __init__(self, vd, tp, ip='http://192.168.0.30:5000/match'):
+    def __init__(self, vd, tp, rq, ip='http://192.168.0.30:5000/match'):
         self.__ip = ip
         self.__vd = vd
         self.__tp = tp
+        self.__resultQueue : ResultQueue = rq
         self.__config = Config()
-        
+
 
     def reqSendFrame(self, sendCycle, timeout):
         th = threading.Thread(target=self._reqSendFrame, args=(sendCycle,timeout))
@@ -44,14 +45,12 @@ class Request:
             for withoutMask, name in req:
 
                 if withoutMask:
-                    print(f"withoutMask = {withoutMask}, name = {name}")
-
+                    self.__resultQueue.addDataWhenChecked(name)
                 else :
-                    pass
+                    self.__resultQueue.addDataWhenMasked()
 
         except requests.exceptions.Timeout as e:
-            #TODO: 서버 상태가 좋지 않음을 라벨에 공유해준다
-            print('Error :',e)
+            self.__resultQueue.addDataWhenTimeout()
             return
 
         except cv2.error as e:

@@ -1,6 +1,9 @@
 from client.gui.gui_builder import GuiBuilder
 from PyQt5 import QtCore, QtGui, QtWidgets
 from client.src.requests.requests import Request
+from client.src.requests.resultQueue import ResultQueue
+
+import threading
 
 MAINWINDOW = "MainWindow"
 TRANSLATE = QtCore.QCoreApplication.translate
@@ -11,8 +14,11 @@ class RequestLayout(QtWidgets.QVBoxLayout):
     def __init__(self, vd, tp, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.request = Request(vd,tp)
+        self.resultQueue = ResultQueue()
+
+        self.request = Request(vd,tp, self.resultQueue)
         self.request.reqSendFrame(sendCycle=1,timeout=3)
+
         hBoxTop = QtWidgets.QHBoxLayout()
         hBoxBot = QtWidgets.QHBoxLayout()
 
@@ -33,16 +39,21 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         
         self.addLayout(hBoxTop)
         self.addLayout(hBoxBot)
-    
-    def setLabelText(self, target, text):
-        label : QtWidgets.QLabel = None
 
-        if target == 'Top':
-            label = self.labelTopRight
-        elif target == 'Bot':
-            label = self.labelBotRight
-        else:
-            return
-
-        label.setText(text)
+        self.checkQueue()
     
+    def setLabelText(self, data : tuple):
+
+        state, result = data
+        self.labelTopRight.setText(state)
+        self.labelBotRight.setText(result)
+
+        
+    def checkQueue(self):
+        th = threading.Thread(target=self._checkQueue)
+        th.start()
+    
+    def _checkQueue(self):
+        while True:
+            if self.resultQueue.isExistData():
+                self.setLabelText(self.resultQueue.getData())
