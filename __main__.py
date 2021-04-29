@@ -1,5 +1,5 @@
-#from .face.camera import Camera
 from .gui.gui_main import Ui_Main
+from .setting import Config
 # import argparse
 # ap = argparse.ArgumentParser()
 
@@ -9,6 +9,7 @@ from .gui.gui_main import Ui_Main
 # args = vars(ap.parse_args())
 
 def main():
+    config = Config("config")
     mainUi = Ui_Main(480,800)
     mainUi.startUi()
 
