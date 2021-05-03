@@ -5,46 +5,51 @@ from client.src.requests.resultQueue import ResultQueue
 
 import threading
 
-MAINWINDOW = "Request"
-TRANSLATE = QtCore.QCoreApplication.translate
-guiBuilder = GuiBuilder(MAINWINDOW, TRANSLATE)
 
 class RequestLayout(QtWidgets.QVBoxLayout):
+
+    resultQueue = ResultQueue()
+    LB_state : QtWidgets.QLabel
+    LB_result : QtWidgets.QLabel
 
     def __init__(self, vd, tp, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.resultQueue = ResultQueue()
+        self._initLayout()
+        self._initRequestModule(vd,tp)
+        
+        
+    def _initLayout(self):
 
-        self.request = Request(vd,tp, self.resultQueue)
-        self.request.reqSendFrame(sendCycle=1,timeout=3)
-
+        guiBuilder = GuiBuilder("Request")
         hBoxTop = guiBuilder.makeHBoxLayoutIn(self)
         hBoxBot = guiBuilder.makeHBoxLayoutIn(self)
-
         guiBuilder.makeLabelIn(hBoxTop, "검증 상태: ", 
                             QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.labelTopRight = guiBuilder.makeLabelIn(hBoxTop, "대기중", 
+        self.LB_state = guiBuilder.makeLabelIn(hBoxTop, "...", 
                             QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         guiBuilder.makeLabelIn(hBoxBot, "검증 결과: ",
                             QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.labelBotRight = guiBuilder.makeLabelIn(hBoxBot, '대기중2',
+        self.LB_result = guiBuilder.makeLabelIn(hBoxBot, "...",
                             QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-
-        self.checkQueue()
     
-    def setLabelText(self, data : tuple):
+    def _initRequestModule(self, vd, tp):
+        
+        request = Request(vd,tp, self.resultQueue)
+        request.reqSendFrame(sendCycle=1,timeout=3)
+        self._checkQueue()
+
+    def _setLabelTextBy(self, data : tuple):
 
         state, result = data
-        self.labelTopRight.setText(state)
-        self.labelBotRight.setText(result)
-
+        self.LB_state.setText(state)
+        self.LB_result.setText(result)
         
-    def checkQueue(self):
-        th = threading.Thread(target=self._checkQueue)
+    def _checkQueue(self):
+        th = threading.Thread(target=self.__checkQueue)
         th.start()
     
-    def _checkQueue(self):
+    def __checkQueue(self):
         while True:
             if self.resultQueue.isExistData():
-                self.setLabelText(self.resultQueue.getData())
+                self._setLabelTextBy(self.resultQueue.getData())

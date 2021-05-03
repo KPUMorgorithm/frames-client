@@ -1,12 +1,11 @@
 from PyQt5 import QtCore, QtWidgets
 
-
 class GuiBuilder:
 
-    def __init__(self, crtWindow, translate):
+    def __init__(self, crtWindow):
         self.__crtWindow = crtWindow
         self.__callNum = 0
-        self.__translate = translate
+        self.__translate = QtCore.QCoreApplication.translate
 
     def makeHBoxLayoutIn(self, location : QtWidgets.QBoxLayout):
         
@@ -31,14 +30,6 @@ class GuiBuilder:
 
         return label
 
-    def makeFrame(self, location):
-        frame = QtWidgets.QFrame(location)
-        frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
-        frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        frame.setObjectName(self.__makeObjectName("frame"))
-    
-        return frame
 
     def __callNameNum(self):
         self.__callNum += 1
@@ -47,6 +38,14 @@ class GuiBuilder:
     def __makeObjectName(self, name):
         return self.__crtWindow + name + str(self.__callNameNum)
 
+    # def makeFrame(self, location):
+    #     frame = QtWidgets.QFrame(location)
+    #     frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
+    #     frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    #     frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    #     frame.setObjectName(self.__makeObjectName("frame"))
+    
+    #     return frame
 
     # def makeMainWindow(self, W, H):
     #     mainWindow = QtWidgets.QMainWindow()
