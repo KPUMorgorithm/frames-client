@@ -31,6 +31,7 @@ class Config(metaclass = SingletonInstane):
     def __init__(self, configName):
         self.__configName = 'client/'+configName+'.ini'
         self.iniLoad()
+        print("Config 생성됨(싱글톤 확인용)")
 
     def iniLoad(self):
         try:
