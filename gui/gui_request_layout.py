@@ -26,7 +26,7 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         hBoxTop = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
         hBoxBot = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
 
-        GuiBuilder.makeLabelIn(hBoxTop, "검증 상태", 
+        GuiBuilder.makeLabelIn(hBoxTop, "상태", 
                             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.LB_state = GuiBuilder.makeLabelIn(hBoxTop, "...", 
                             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
