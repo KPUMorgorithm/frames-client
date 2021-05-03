@@ -21,16 +21,16 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         
     def _initLayout(self):
 
-        guiBuilder = GuiBuilder("Request")
-        hBoxTop = guiBuilder.makeHBoxLayoutIn(self)
-        hBoxBot = guiBuilder.makeHBoxLayoutIn(self)
-        guiBuilder.makeLabelIn(hBoxTop, "검증 상태: ", 
+        hBoxTop = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
+        hBoxBot = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
+
+        GuiBuilder.makeLabelIn(hBoxTop, "검증 상태: ", 
                             QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.LB_state = guiBuilder.makeLabelIn(hBoxTop, "...", 
+        self.LB_state = GuiBuilder.makeLabelIn(hBoxTop, "...", 
                             QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        guiBuilder.makeLabelIn(hBoxBot, "검증 결과: ",
+        GuiBuilder.makeLabelIn(hBoxBot, "검증 결과: ",
                             QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.LB_result = guiBuilder.makeLabelIn(hBoxBot, "...",
+        self.LB_result = GuiBuilder.makeLabelIn(hBoxBot, "...",
                             QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
     
     def _initRequestModule(self, vd, tp):
