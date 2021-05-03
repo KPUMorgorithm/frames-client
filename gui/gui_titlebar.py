@@ -1,5 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 from client.gui.gui_builder import GuiBuilder
+from client.gui.gui_setting import SettingWindow
 
 
 class TitleBar(QtWidgets.QHBoxLayout):
@@ -26,4 +27,4 @@ class TitleBar(QtWidgets.QHBoxLayout):
         self.parent().parent().close()
 
     def event_BTN_setting(self):
-        pass
+        SettingWindow()

@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 import sys
 from client.gui.gui_builder import GuiBuilder
 from client.gui.gui_request_layout import RequestLayout
