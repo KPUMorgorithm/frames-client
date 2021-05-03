@@ -22,6 +22,9 @@ class ResultQueue(Queue):
     def addDataWhenMasked(self):
         self.__addDatainQueueBy(("검증 실패","마스크를 탈의해주세요"))
 
+    def addDataWhenLowTemperature(self):
+        self.__addDatainQueueBy(("데이터 미 전송","체온을 측정해주세요"))
+
     def getData(self) -> tuple:
         if self.isExistData():
             return self.get()

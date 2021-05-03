@@ -31,7 +31,6 @@ class Config(metaclass = SingletonInstane):
     def __init__(self, configName):
         self.__configName = 'client/'+configName+'.ini'
         self.iniLoad()
-        print("생성됨")
 
     def iniLoad(self):
         try:

@@ -12,11 +12,13 @@ class RequestLayout(QtWidgets.QVBoxLayout):
     LB_state : QtWidgets.QLabel
     LB_result : QtWidgets.QLabel
 
-    def __init__(self, vd, tp, *args, **kwargs):
+    def __init__(self, parent : QtWidgets.QBoxLayout, stretch ,vd, tp, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._initLayout()
         self._initRequestModule(vd,tp)
+
+        parent.addLayout(self, stretch)
         
         
     def _initLayout(self):
@@ -24,14 +26,14 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         hBoxTop = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
         hBoxBot = GuiBuilder.makeBoxLayoutIn(self, isVertical = False)
 
-        GuiBuilder.makeLabelIn(hBoxTop, "검증 상태: ", 
-                            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        GuiBuilder.makeLabelIn(hBoxTop, "상태", 
+                            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.LB_state = GuiBuilder.makeLabelIn(hBoxTop, "...", 
-                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        GuiBuilder.makeLabelIn(hBoxBot, "검증 결과: ",
-                            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        GuiBuilder.makeLabelIn(hBoxBot, "검증 결과",
+                            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.LB_result = GuiBuilder.makeLabelIn(hBoxBot, "...",
-                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
     
     def _initRequestModule(self, vd, tp):
         

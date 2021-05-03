@@ -13,6 +13,7 @@ class Request:
         self.__tp = tp
         self.__resultQueue : ResultQueue = rq
         self.__config = Config()
+        self.__threshold = 30.0
 
 
     def reqSendFrame(self, sendCycle, timeout):
@@ -21,15 +22,20 @@ class Request:
 
     def _reqSendFrame(self,sendCycle, timeout):
         try:
+
+            temperature = self.__tp.highestTemp
+
+            if(temperature <= self.__threshold):
+                raise Exception('Low Temperature')
+
             _, img_encoded = cv2.imencode('.jpg', self.__vd.getFrame())
             t = time.time()
 
             file = {'frame' : ('frame.jpg', img_encoded, 'image/jpeg')}
 
-            #TODO temperature 30도 이상정도일때만 전송
             data = {
-                "temperature" : self.__tp.highestTemp,
-                "facilityNum" : self.__config.getUUID(),
+                "temperature" : temperature,
+                "facilityNum" : self.__config.getFacilityNum(),
                 "state" : self.__config.getState()
                 }
 
@@ -55,6 +61,9 @@ class Request:
 
         except cv2.error as e:
             print('Error :',e,"cv2 error")
+
+        except Exception as e:
+            self.__resultQueue.addDataWhenLowTemperature()
 
         finally:
             threading.Timer(sendCycle,self._reqSendFrame, args=(sendCycle,timeout)).start()

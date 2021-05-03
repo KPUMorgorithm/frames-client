@@ -9,7 +9,7 @@ from .setting import Config
 # args = vars(ap.parse_args())
 
 def main():
-    config = Config("config")
+    Config("config")
     mainUi = Ui_Main(480,800)
     mainUi.startUi()
 

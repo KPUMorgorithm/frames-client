@@ -1,8 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-from .gui_video_label import VideoLabel
-from .gui_request_layout import RequestLayout
-from .gui_builder import GuiBuilder
+from client.gui.gui_builder import GuiBuilder
+from client.gui.gui_request_layout import RequestLayout
+from client.gui.gui_video_label import VideoLabel
+from client.gui.gui_titlebar import TitleBar
 
 class Ui_Main(object):
 
@@ -19,17 +20,19 @@ class Ui_MainWidget(QtWidgets.QWidget):
 
     def __init__(self, W, H):
         super().__init__()
-        
-        vbox = GuiBuilder.makeBoxLayoutIn(self, isVertical = True)
 
-        LB_vd = VideoLabel(self)
-
-        vbox.addWidget(LB_vd, stretch = 2)
-        vbox.addLayout(RequestLayout(LB_vd.getVideo(),LB_vd.getTemperautre(),self), 
-                        stretch = 1)
+        self._addContents()
 
         self.setMinimumSize(W,H)
         self.resize(W,H)
+
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # self.showFullScreen()
+
+    def _addContents(self):
         
+        vbox = GuiBuilder.makeBoxLayoutIn(self, isVertical = True)
 
-
+        TitleBar(parent=vbox, stretch= 0.5)
+        LB_vd = VideoLabel(parent = vbox, stretch = 14)
+        RequestLayout(vbox, 5, LB_vd.getVideo(),LB_vd.getTemperautre())
