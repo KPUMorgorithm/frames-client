@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 
 class GuiBuilder:
     def __init__(self):
@@ -37,3 +37,11 @@ class GuiBuilder:
         parent.addWidget(label)
 
         return label
+
+    @staticmethod
+    def makePushButtonIn(parent, stretch, imagePath, text):
+        btn = QtWidgets.QPushButton(QtGui.QIcon(imagePath), text)
+        btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
+        parent.addWidget(btn, stretch = stretch)
+
+        return btn

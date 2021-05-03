@@ -21,7 +21,7 @@ class Ui_MainWidget(QtWidgets.QWidget):
     def __init__(self, W, H):
         super().__init__()
 
-        self.addContents()
+        self._addContents()
 
         self.setMinimumSize(W,H)
         self.resize(W,H)
@@ -29,10 +29,10 @@ class Ui_MainWidget(QtWidgets.QWidget):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         # self.showFullScreen()
 
-    def addContents(self):
+    def _addContents(self):
         
         vbox = GuiBuilder.makeBoxLayoutIn(self, isVertical = True)
 
-        TitleBar(parent=vbox, stretch= 1)
+        TitleBar(parent=vbox, stretch= 0.5)
         LB_vd = VideoLabel(parent = vbox, stretch = 14)
         RequestLayout(vbox, 5, LB_vd.getVideo(),LB_vd.getTemperautre())
