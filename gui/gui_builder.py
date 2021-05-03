@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtWidgets
+from .gui_video_label import VideoLabel
 
 class GuiBuilder:
-
     def __init__(self):
         pass
-    
+
     @staticmethod
     def makeBoxLayoutIn(parent, isVertical : bool):
         box : QtWidgets.QBoxLayout = None
@@ -39,3 +39,6 @@ class GuiBuilder:
 
         return label
 
+    @staticmethod
+    def makeVideoLabel(parent):
+        return VideoLabel(parent)
