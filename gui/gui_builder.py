@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtWidgets
-from .gui_video_label import VideoLabel
 
 class GuiBuilder:
     def __init__(self):
@@ -38,7 +37,3 @@ class GuiBuilder:
         parent.addWidget(label)
 
         return label
-
-    @staticmethod
-    def makeVideoLabel(parent):
-        return VideoLabel(parent)

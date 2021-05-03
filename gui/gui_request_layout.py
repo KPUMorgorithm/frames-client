@@ -12,11 +12,13 @@ class RequestLayout(QtWidgets.QVBoxLayout):
     LB_state : QtWidgets.QLabel
     LB_result : QtWidgets.QLabel
 
-    def __init__(self, vd, tp, *args, **kwargs):
+    def __init__(self, parent : QtWidgets.QBoxLayout, stretch ,vd, tp, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._initLayout()
         self._initRequestModule(vd,tp)
+
+        parent.addLayout(self, stretch)
         
         
     def _initLayout(self):

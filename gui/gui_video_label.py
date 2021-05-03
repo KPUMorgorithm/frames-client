@@ -1,10 +1,10 @@
-from ..src.temperature.temperature import Temperature
+from client.src.temperature.temperature import Temperature
 from PyQt5 import QtGui, QtWidgets, QtCore
-from ..src.video.video import Video
+from client.src.video.video import Video
 
 class VideoLabel(QtWidgets.QLabel):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, parent : QtWidgets.QBoxLayout, stretch,*args, **kwargs):
         super(VideoLabel, self).__init__(*args, **kwargs)
         self.setSizePolicy(QtWidgets.QSizePolicy.Ignored,QtWidgets.QSizePolicy.Ignored)
         self.setScaledContents(True)
@@ -14,6 +14,8 @@ class VideoLabel(QtWidgets.QLabel):
         self.vd = Video(self)
         self.vd.setRunning(True)
         self.vd.start()
+
+        parent.addWidget(self, stretch=stretch)
 
     def pixmapEvent(self, pixmap):
         qp = QtGui.QPainter(pixmap)
