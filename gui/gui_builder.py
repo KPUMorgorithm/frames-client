@@ -27,7 +27,6 @@ class GuiBuilder:
         
         box.setSpacing(5)
         box.setContentsMargins(5,5,5,5)
-
         return box
 
     @staticmethod
