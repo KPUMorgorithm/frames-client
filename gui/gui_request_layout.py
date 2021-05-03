@@ -5,7 +5,7 @@ from client.src.requests.resultQueue import ResultQueue
 
 import threading
 
-MAINWINDOW = "MainWindow"
+MAINWINDOW = "Request"
 TRANSLATE = QtCore.QCoreApplication.translate
 guiBuilder = GuiBuilder(MAINWINDOW, TRANSLATE)
 
@@ -19,26 +19,17 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         self.request = Request(vd,tp, self.resultQueue)
         self.request.reqSendFrame(sendCycle=1,timeout=3)
 
-        hBoxTop = QtWidgets.QHBoxLayout()
-        hBoxBot = QtWidgets.QHBoxLayout()
+        hBoxTop = guiBuilder.makeHBoxLayoutIn(self)
+        hBoxBot = guiBuilder.makeHBoxLayoutIn(self)
 
-        labelTopLeft = guiBuilder.makeLabel(self, "검증 상태: ")
-        self.labelTopRight = guiBuilder.makeLabel(self.parent(),'대기중')
-        labelBotLeft = guiBuilder.makeLabel(self.parent(), '검증 결과: ')
-        self.labelBotRight = guiBuilder.makeLabel(self.parent(), '대기중2')
-
-        labelTopLeft.setAlignment(QtCore.Qt.AlignRight)
-        self.labelTopRight.setAlignment(QtCore.Qt.AlignLeft)
-        labelBotLeft.setAlignment(QtCore.Qt.AlignRight)
-        self.labelBotRight.setAlignment(QtCore.Qt.AlignLeft)
-
-        hBoxTop.addWidget(labelTopLeft)
-        hBoxTop.addWidget(self.labelTopRight)
-        hBoxBot.addWidget(labelBotLeft)
-        hBoxBot.addWidget(self.labelBotRight)
-        
-        self.addLayout(hBoxTop)
-        self.addLayout(hBoxBot)
+        guiBuilder.makeLabelIn(hBoxTop, "검증 상태: ", 
+                            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.labelTopRight = guiBuilder.makeLabelIn(hBoxTop, "대기중", 
+                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        guiBuilder.makeLabelIn(hBoxBot, "검증 결과: ",
+                            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.labelBotRight = guiBuilder.makeLabelIn(hBoxBot, '대기중2',
+                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
 
         self.checkQueue()
     
