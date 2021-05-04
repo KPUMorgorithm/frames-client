@@ -5,7 +5,6 @@ from client.src.requests.resultQueue import ResultQueue
 
 import threading
 
-
 class RequestLayout(QtWidgets.QVBoxLayout):
 
     resultQueue = ResultQueue()
@@ -40,13 +39,7 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         request = Request(vd,tp, self.resultQueue)
         request.reqSendFrame(sendCycle=1,timeout=3)
         self._checkQueue()
-
-    def _setLabelTextBy(self, data : tuple):
-
-        state, result = data
-        self.LB_state.setText(state)
-        self.LB_result.setText(result)
-        
+                
     def _checkQueue(self):
         th = threading.Thread(target=self.__checkQueue)
         th.start()
@@ -54,4 +47,8 @@ class RequestLayout(QtWidgets.QVBoxLayout):
     def __checkQueue(self):
         while True:
             if self.resultQueue.isExistData():
-                self._setLabelTextBy(self.resultQueue.getData())
+                state, result = self.resultQueue.getData()
+
+                #TODO 추가 데이터(stylesheet 같은거 받는것도 대비)
+                self.LB_state.setText(state)
+                self.LB_result.setText(result)
