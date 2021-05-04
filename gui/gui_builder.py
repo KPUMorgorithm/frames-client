@@ -44,3 +44,9 @@ class GuiBuilder:
         parent.addWidget(btn, stretch = stretch)
 
         return btn
+
+    @staticmethod
+    def makeLineEditIn(parent, stretch, text):
+        lineEdit = QtWidgets.QLineEdit(text)
+        parent.addWidget(lineEdit, stretch = stretch)
+        return lineEdit

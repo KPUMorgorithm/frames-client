@@ -3,6 +3,9 @@ from client.gui.gui_builder import GuiBuilder
 from client.setting import Config
 
 class SettingWindow(QtWidgets.QDialog):
+
+    isfNum : bool
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Settings")
@@ -12,51 +15,43 @@ class SettingWindow(QtWidgets.QDialog):
         
         self.exec_()
 
+    #/device/facility?deviceId=~~&~~~
     def initUI(self):
 
         mainVBox = GuiBuilder.makeBoxLayoutIn(self, True)
-        self.__initSettingVBox(mainVBox)
-        self.__initCloseHBox(mainVBox)
-
-    def __initSettingVBox(self, mainVBox):
-        settingVBox = GuiBuilder.makeBoxLayoutIn(mainVBox, True)
+        #TODO: Stretch 바꿔야 함
+        #TODO: 토글 이벤트 달기
+        facilitySelectHBox = GuiBuilder.makeBoxLayoutIn(mainVBox, False)
+        BTN_fnum = self.__setFnumBtn(facilitySelectHBox)
+        BTN_fName = self.__setFnameBtn(facilitySelectHBox)
+        LE_facilityEdit = GuiBuilder.makeLineEditIn(mainVBox,1,str(self.__config.getFacilityNum()))
         
-        self.__initFacilityInputHBox(settingVBox)
-        self.__initFacilityResultHBox(settingVBox)
-        self.__initStateHBox(settingVBox)
+        stateSelectHBox = GuiBuilder.makeBoxLayoutIn(mainVBox, False)
+        BTN_stateIn = GuiBuilder.makePushButtonIn(stateSelectHBox,1,None,"입구")
+        BTN_stateOut = GuiBuilder.makePushButtonIn(stateSelectHBox,1,None,"출구")
+        
+        closeHBox = GuiBuilder.makeBoxLayoutIn(mainVBox, False)
+        BTN_save = self.__setSaveBtn(closeHBox)
+        BTN_close = self.__setCloseBtn(closeHBox)
 
-    #TODO: Stretch 바꿔야 함
-    def __initFacilityInputHBox(self, settingVBox):
-        fInputHBox = GuiBuilder.makeBoxLayoutIn(settingVBox, False)
+    def __setSaveBtn(self, parent):
+        btn = GuiBuilder.makePushButtonIn(parent,1,None,"저장")
+        #TODO   정보를 받은 채로 request를 보내야함
+        #       성공할 시 config 저장 후 self.타이틀바 새로고침, self.close()
+        #       실패할 시 메세지 출력
 
-        GuiBuilder.makeLabelIn(fInputHBox,"건물 번호", 
-            QtCore.Qt.AlignCenter).setStyleSheet("border: 1px solid black;")
+    def __setCloseBtn(self, parent):
+        btn = GuiBuilder.makePushButtonIn(parent,1,None,"닫기")
+        btn.clicked.connect(lambda: self.close())
+        return btn
 
-        # 입력 받고 정보 전달해줘야함
-        inputBox = QtWidgets.QLineEdit(str(self.__config.getFacilityNum()))
-        fInputHBox.addWidget(inputBox)
+    def __setFnumBtn(self, parent):
+        btn = GuiBuilder.makePushButtonIn(parent,1,None,"건물 번호")
+        btn.setCheckable(True)
+        btn.toggle()
+        return btn
 
-        LB_sendRequest = GuiBuilder.makePushButtonIn(fInputHBox,1,None,"검증")
-
-    #TODO: Request 결과 따라 내용 바뀌어야 함
-    def __initFacilityResultHBox(self, settingVBox):
-        fResultHBox = GuiBuilder.makeBoxLayoutIn(settingVBox, False)
-        LB_result = GuiBuilder.makeLabelIn(fResultHBox, "대기중", QtCore.Qt.AlignCenter)
-        LB_result.setStyleSheet("border: 1px solid black;")
-
-    #TODO: state값 따라 입장,퇴장 바꾸고 클릭할 때 마다 변경되게 
-    def __initStateHBox(self, settingVBox):
-        stateHBox = GuiBuilder.makeBoxLayoutIn(settingVBox, False)
-        GuiBuilder.makePushButtonIn(stateHBox,1,None,
-            str(self.__config.getState()))
-
-    def __initCloseHBox(self, mainVBox):
-        saveHBox = GuiBuilder.makeBoxLayoutIn(mainVBox, False)
-        BTN_exit = GuiBuilder.makePushButtonIn(saveHBox,1,None,"닫기")
-        BTN_exit.clicked.connect(lambda: self.event_BTN_exit())
-
-    def event_BTN_exit(self):
-        self.close()
-
-    def event_BTN_request(self):
-        pass
+    def __setFnameBtn(self, parent):
+        btn = GuiBuilder.makePushButtonIn(parent,1,None,"건물 이름")
+        btn.setCheckable(True)
+        return btn
