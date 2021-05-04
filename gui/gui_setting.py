@@ -10,7 +10,7 @@ class SettingWindow(QtWidgets.QDialog):
         self.__config = Config()
         self.initUI()
         
-        # self.exec_()
+        self.exec_()
 
     def initUI(self):
 
@@ -32,14 +32,17 @@ class SettingWindow(QtWidgets.QDialog):
         GuiBuilder.makeLabelIn(fInputHBox,"건물 번호", 
             QtCore.Qt.AlignCenter).setStyleSheet("border: 1px solid black;")
 
+        # 입력 받고 정보 전달해줘야함
         inputBox = QtWidgets.QLineEdit(str(self.__config.getFacilityNum()))
         fInputHBox.addWidget(inputBox)
 
-    #TODO: 위에 값 받아서 리퀘스트보내야함
+        LB_sendRequest = GuiBuilder.makePushButtonIn(fInputHBox,1,None,"검증")
+
+    #TODO: Request 결과 따라 내용 바뀌어야 함
     def __initFacilityResultHBox(self, settingVBox):
         fResultHBox = GuiBuilder.makeBoxLayoutIn(settingVBox, False)
-        GuiBuilder.makeLabelIn(fResultHBox, "대기중",
-            QtCore.Qt.AlignCenter).setStyleSheet("border: 1px solid black;")
+        LB_result = GuiBuilder.makeLabelIn(fResultHBox, "대기중", QtCore.Qt.AlignCenter)
+        LB_result.setStyleSheet("border: 1px solid black;")
 
     #TODO: state값 따라 입장,퇴장 바꾸고 클릭할 때 마다 변경되게 
     def __initStateHBox(self, settingVBox):
@@ -55,3 +58,5 @@ class SettingWindow(QtWidgets.QDialog):
     def event_BTN_exit(self):
         self.close()
 
+    def event_BTN_request(self):
+        pass

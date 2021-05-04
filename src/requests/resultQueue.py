@@ -17,6 +17,7 @@ class ResultQueue(Queue):
         self.__addDatainQueueBy(("서버 연결 실패",""))
 
     def addDataWhenChecked(self, name):
+        #TODO: Unknown일 땐?
         self.__addDatainQueueBy(("검증 완료",name))
     
     def addDataWhenMasked(self):
