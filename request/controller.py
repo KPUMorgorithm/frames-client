@@ -43,7 +43,6 @@ class RequestController:
 
     def _updateView(self, data):
         state, title, subtitle = data
-        #위는 32 아래는 28
         self.__changeStyleSheet(state)
 
         self.LB_title.setText(title)
