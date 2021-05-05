@@ -4,7 +4,7 @@ import threading
 import time
 
 from client.setting import Config
-from client.src.requests.resultQueue import ResultQueue
+from client.request.resultQueue import ResultQueue
 
 class Request:
     def __init__(self, vd, tp, rq, ip='http://192.168.0.30:5000/match'):
