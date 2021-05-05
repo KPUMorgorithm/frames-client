@@ -53,6 +53,6 @@ class LayoutFactory(metaclass = SingletonInstane):
         view = QRWindow()
         QRController(view, url)
 
-    def makeSettingWindow(cls):
+    def makeSettingWindow(self):
         view = SettingWindow()
         SettingController(view)
