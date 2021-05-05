@@ -1,3 +1,5 @@
+from client.titlebar.controller import TitleBarController
+from client.titlebar.view import TitleBarLayout
 from client.video.controller import VideoController
 from client.video.view import VideoLabel
 from client.video.video import Video
@@ -20,3 +22,7 @@ class LayoutFactory:
     def makeVideoModule(self, parent, stretch):
         view = VideoLabel(parent, stretch)
         VideoController(view, self.vd, self.tp)
+
+    def makeTitleBarModule(self, parent, stretch):
+        view = TitleBarLayout(parent, stretch)
+        TitleBarController(view)

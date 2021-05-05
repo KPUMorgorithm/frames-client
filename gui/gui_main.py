@@ -2,7 +2,6 @@ from PyQt5 import QtCore, QtWidgets
 import sys
 from client.gui.gui_builder import GuiBuilder
 from client.layoutFactory import LayoutFactory
-from client.gui.gui_titlebar import TitleBar
 
 from client.gui.gui_QR import QRWindow
 
@@ -35,7 +34,7 @@ class Ui_MainWidget(QtWidgets.QWidget):
         
         vbox = GuiBuilder.makeBoxLayoutIn(self, isVertical = True)
         factory = LayoutFactory()
-        TitleBar(parent=vbox, stretch= 0.5)
+        factory.makeTitleBarModule(vbox, 0.5)
         factory.makeVideoModule(vbox, stretch=14)
         factory.makeRequestModule(vbox, 5)
         
