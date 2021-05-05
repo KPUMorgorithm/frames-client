@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 import qrcode
-from client.gui.gui_builder import GuiBuilder
+from client.src.gui.gui_builder import GuiBuilder
 from client.src.qr.qrcode import QRBuilder
 
 

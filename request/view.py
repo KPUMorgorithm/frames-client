@@ -1,4 +1,4 @@
-from client.gui.gui_builder import GuiBuilder
+from client.src.gui.gui_builder import GuiBuilder
 from PyQt5 import QtCore, QtWidgets
 
 
