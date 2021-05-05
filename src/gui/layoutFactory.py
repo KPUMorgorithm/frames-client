@@ -1,3 +1,5 @@
+from client.QR.controller import QRController
+from client.QR.view import QRWindow
 from client.titlebar.controller import TitleBarController
 from client.titlebar.view import TitleBarLayout
 from client.video.controller import VideoController
@@ -26,3 +28,7 @@ class LayoutFactory:
     def makeTitleBarModule(self, parent, stretch):
         view = TitleBarLayout(parent, stretch)
         TitleBarController(view)
+
+    def makeQRWindow(self, url):
+        view = QRWindow()
+        QRController(view, url)
