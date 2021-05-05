@@ -50,3 +50,28 @@ class GuiBuilder:
         lineEdit = QtWidgets.QLineEdit(text)
         parent.addWidget(lineEdit, stretch = stretch)
         return lineEdit
+
+    @staticmethod
+    def makeRadioButton(parent, text):
+        btn = QtWidgets.QRadioButton(f"{text} ")
+        btn.setStyleSheet('''
+        QRadioButton { font: 15pt;} 
+        QRadioButton::indicator { width: 0px; height: 0px; }
+        QRadioButton::checked{
+            background-color: gray; 
+            border : 2px solid black; 
+        }
+        QRadioButton::unchecked{ 
+            background-color: light gray; 
+            border : 2px solid black; }
+        ''')
+
+        parent.addWidget(btn)
+        return btn
+
+    @staticmethod
+    def makeGroupBoxIn(parent):
+        gb = QtWidgets.QGroupBox()
+        parent.addWidget(gb)
+
+        return gb

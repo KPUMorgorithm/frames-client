@@ -76,7 +76,3 @@ class Config(metaclass = SingletonInstane):
 
         self.iniLoad()    
 
-
-
-# class Config(__Config, metaclass=SingletonInstane):
-#   pass
