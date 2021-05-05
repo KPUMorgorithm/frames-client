@@ -1,9 +1,11 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 
 from client.request.view import RequestLayout
 
 from client.request.requests import Request
 from client.request.resultQueue import ResultQueue
+
+from client.request.state_stylesheet import StateStyleSheet
 
 import threading
 
@@ -12,11 +14,17 @@ class RequestController:
 
     LB_title : QtWidgets.QLabel
     LB_subtitle : QtWidgets.QLabel
+    GB_labelBox : QtWidgets.QGroupBox
+
+    cssDict : dict
 
     def __init__(self,view: RequestLayout, vd, tp, config):
+        self.cssDict = StateStyleSheet()
         self.LB_title = view.getLB_title()
         self.LB_subtitle = view.getLB_subtitle()
+        self.GB_labelBox = view.getGB_labelBox()
         self._initRequestModule(vd,tp, config)
+
 
     def _initRequestModule(self, vd, tp,config ):       
         request = Request(vd,tp, self.resultQueue, config)
@@ -30,79 +38,17 @@ class RequestController:
     def __checkQueue(self):
         while True:
             if self.resultQueue.isExistData():
-                # self._updateView(self.resultQueue.getData())
-                pass
+                self._updateView(self.resultQueue.getData())
+
 
     def _updateView(self, data):
         state, title, subtitle = data
-        if state == 0: # 성공
-            self.LB_title.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #719C70;"
-                "font-weight: bold;"
-                "font-size: 32px;"
-                "margin: 0;"
-            )
-            self.LB_subtitle.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #719C70;"
-                "font-weight: bold;"
-                "font-size: 28px;"
-                "margin: 0;"
-            )
-        elif state == 1: # 실패 (서버 연결 실패)
-            self.LB_title.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #F24A33;"
-                "font-weight: bold;"
-                "font-size: 32px;"
-                "margin: 0;"
-            )
-            self.LB_subtitle.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #F24A33;"
-                "font-weight: bold;"
-                "font-size: 28px;"
-                "margin: 0;"
-            )
-        elif state == 2: # 실패 (마스크)
-            self.LB_title.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #F24A33;"
-                "font-weight: bold;"
-                "font-size: 32px;"
-                "margin: 0;"
-            )
-            self.LB_subtitle.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #F24A33;"
-                "font-weight: bold;"
-                "font-size: 28px;"
-                "margin: 0;"
-            )
-        else:
-            self.LB_title.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #333333;"
-                "font-weight: bold;"
-                "font-size: 32px;"
-                "margin: 0;"
-            )
-            self.LB_subtitle.setStyleSheet(
-                "width: 100%;"
-                "color: #FFFFFF;"
-                "background-color: #333333;"
-                "font-weight: bold;"
-                "font-size: 32px;"
-                "margin: 0;"
-            )
+        #위는 32 아래는 28
+        self.__changeStyleSheet(state)
 
         self.LB_title.setText(title)
         self.LB_subtitle.setText(subtitle)
+    
+    def __changeStyleSheet(self, state):
+        self.GB_labelBox.setStyleSheet(self.cssDict[state])
+        self.LB_subtitle.setStyleSheet("font-size: 28px;")

@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtWidgets
 
 class RequestLayout(QtWidgets.QVBoxLayout):
 
+    GB_labelBox : QtWidgets.QGroupBox
     LB_title : QtWidgets.QLabel
     LB_subtitle : QtWidgets.QLabel
 
@@ -18,27 +19,20 @@ class RequestLayout(QtWidgets.QVBoxLayout):
 
         self.setContentsMargins(0, 0, 0, 0)
         self.setSpacing(0)
-
-        self.LB_title = GuiBuilder.makeLabelIn(self, "test", 
+        self.GB_labelBox = GuiBuilder.makeGroupBoxIn(self)
+        Vbox = GuiBuilder.makeBoxLayoutIn(self.GB_labelBox, True)
+        self.LB_title = GuiBuilder.makeLabelIn(Vbox, "test", 
                             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom)
 
-        self.LB_subtitle = GuiBuilder.makeLabelIn(self, "test",
+        self.LB_subtitle = GuiBuilder.makeLabelIn(Vbox, "test",
                             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
 
-        self.LB_title.setStyleSheet(
+        self.GB_labelBox.setStyleSheet(
             "width: 100%;"
             "color: #FFFFFF;"
             "background-color: #333333;"
             "font-weight: bold;"
             "font-size: 32px;"
-            "margin: 0;"
-        )
-        self.LB_subtitle.setStyleSheet(
-            "width: 100%;"
-            "color: #FFFFFF;"
-            "background-color: #333333;"
-            "font-weight: bold;"
-            "font-size: 28px;"
             "margin: 0;"
         )
 
@@ -47,3 +41,6 @@ class RequestLayout(QtWidgets.QVBoxLayout):
     
     def getLB_subtitle(self):
         return self.LB_subtitle
+    
+    def getGB_labelBox(self):
+        return self.GB_labelBox

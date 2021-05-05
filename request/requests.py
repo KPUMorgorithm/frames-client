@@ -51,7 +51,7 @@ class Request:
             for withoutMask, name in req:
 
                 if withoutMask:
-                    self.__resultQueue.addDataWhenChecked(name)
+                    self.__resultQueue.addDataWhenChecked(temperature,name)
                 else :
                     self.__resultQueue.addDataWhenMasked()
 
