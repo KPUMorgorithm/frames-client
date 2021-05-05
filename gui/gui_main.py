@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 import sys
 from client.src.gui.gui_builder import GuiBuilder
-from client.layoutFactory import LayoutFactory
+from client.src.gui.layoutFactory import LayoutFactory
 
 from client.gui.gui_QR import QRWindow
 
