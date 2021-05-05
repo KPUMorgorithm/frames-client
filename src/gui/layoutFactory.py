@@ -5,8 +5,10 @@ from client.settings.view import SettingWindow
 
 from client.QR.controller import QRController
 from client.QR.view import QRWindow
+
 from client.titlebar.controller import TitleBarController
 from client.titlebar.view import TitleBarLayout
+
 from client.video.controller import VideoController
 from client.video.view import VideoLabel
 from client.video.video import Video
@@ -44,12 +46,13 @@ class LayoutFactory(metaclass = SingletonInstane):
 
     def makeTitleBarModule(self, parent, stretch):
         view = TitleBarLayout(parent, stretch)
-        TitleBarController(view)
-
-    def makeQRWindow(self, url):
+        TitleBarController(view, self.makeSettingWindow)
+    
+    @classmethod
+    def makeQRWindow(cls, url):
         view = QRWindow()
         QRController(view, url)
-    
-    def makeSettingWindow(self):
+
+    def makeSettingWindow(cls):
         view = SettingWindow()
         SettingController(view)
