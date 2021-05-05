@@ -1,18 +1,18 @@
+from client.src.config.config import Config
 import cv2
 import requests
 import threading
 import time
 
-from client.setting import Config
-from client.src.requests.resultQueue import ResultQueue
+from client.request.resultQueue import ResultQueue
 
 class Request:
-    def __init__(self, vd, tp, rq, ip='http://192.168.0.30:5000/match'):
+    def __init__(self, vd, tp, rq, config, ip='http://192.168.0.30:5000/match'):
         self.__ip = ip
         self.__vd = vd
         self.__tp = tp
         self.__resultQueue : ResultQueue = rq
-        self.__config = Config()
+        self.__config : Config = config
         self.__threshold = 30.0
 
 
@@ -51,7 +51,7 @@ class Request:
             for withoutMask, name in req:
 
                 if withoutMask:
-                    self.__resultQueue.addDataWhenChecked(name)
+                    self.__resultQueue.addDataWhenChecked(temperature,name)
                 else :
                     self.__resultQueue.addDataWhenMasked()
 

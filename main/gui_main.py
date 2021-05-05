@@ -1,9 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 import sys
-from client.gui.gui_builder import GuiBuilder
-from client.gui.gui_request_layout import RequestLayout
-from client.gui.gui_video_label import VideoLabel
-from client.gui.gui_titlebar import TitleBar
+from client.src.gui.gui_builder import GuiBuilder
+from client.src.gui.layoutFactory import LayoutFactory
 
 class Ui_Main(object):
 
@@ -28,11 +26,13 @@ class Ui_MainWidget(QtWidgets.QWidget):
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         # self.showFullScreen()
+        # QRWindow("https://naver.com")
 
     def _addContents(self):
         
         vbox = GuiBuilder.makeBoxLayoutIn(self, isVertical = True)
-
-        TitleBar(parent=vbox, stretch= 0.5)
-        LB_vd = VideoLabel(parent = vbox, stretch = 14)
-        RequestLayout(vbox, 5, LB_vd.getVideo(),LB_vd.getTemperautre())
+        factory = LayoutFactory()
+        factory.makeTitleBarModule(vbox, 0.5)
+        factory.makeVideoModule(vbox, stretch=14)
+        factory.makeRequestModule(vbox, 5)
+        # factory.makeQRWindow("https://naver.com")
