@@ -1,10 +1,22 @@
+from client.video.controller import VideoController
+from client.video.view import VideoLabel
+from client.video.video import Video
+
+from client.src.temperature.temperature import Temperature
+
 from client.request.controller import RequestController
 from client.request.view import RequestLayout
-from client.request import *
 
-class layoutFactory:
+class LayoutFactory:
     
-    @staticmethod
-    def makeRequestModule(parent, stretch ,vd, tp):
+    def __init__(self):
+        self.tp = Temperature("client/src/temperature/temperature.dll")
+        self.vd = Video()
+
+    def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
-        RequestController(vd,tp,view)
+        RequestController(self.vd,self.tp,view)
+    
+    def makeVideoModule(self, parent, stretch):
+        view = VideoLabel(parent, stretch)
+        VideoController(view, self.vd, self.tp)
