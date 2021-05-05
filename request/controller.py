@@ -13,13 +13,13 @@ class RequestController:
     LB_title : QtWidgets.QLabel
     LB_subtitle : QtWidgets.QLabel
 
-    def __init__(self,vd, tp, view: RequestLayout):
+    def __init__(self,view: RequestLayout, vd, tp, config):
         self.LB_title = view.getLB_title()
         self.LB_subtitle = view.getLB_subtitle()
-        self._initRequestModule(vd,tp)
+        self._initRequestModule(vd,tp, config)
 
-    def _initRequestModule(self, vd, tp):       
-        request = Request(vd,tp, self.resultQueue)
+    def _initRequestModule(self, vd, tp,config ):       
+        request = Request(vd,tp, self.resultQueue, config)
         request.reqSendFrame(sendCycle=1,timeout=3)
         self._checkQueue()
 
@@ -30,7 +30,8 @@ class RequestController:
     def __checkQueue(self):
         while True:
             if self.resultQueue.isExistData():
-                self._updateView(self.resultQueue.getData())
+                # self._updateView(self.resultQueue.getData())
+                pass
 
     def _updateView(self, data):
         state, title, subtitle = data
