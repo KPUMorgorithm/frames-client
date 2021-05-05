@@ -12,26 +12,15 @@ FNUM = 'facilityNum'
 STATE = 'state'
 UUID = 'uuid'
 
-class SingletonInstane(type):
-    _instance = {}
-
-    def __call__(cls, *args, **kwargs):
-
-        if cls not in cls._instance:
-            cls._instance[cls] = super(SingletonInstane, cls).__call__(*args, **kwargs)
-        return cls._instance[cls]
-        
-
-class Config(metaclass = SingletonInstane):
+class Config():
     __facilityNum : int
     __state : int
     __uuid : str
     __configName : str
 
     def __init__(self, configName):
-        self.__configName = 'client/'+configName+'.ini'
+        self.__configName = 'client/src/config/'+configName+'.ini'
         self.iniLoad()
-        print("Config 생성됨(싱글톤 확인용)")
 
     def iniLoad(self):
         try:

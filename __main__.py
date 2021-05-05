@@ -1,5 +1,5 @@
 from .gui.gui_main import Ui_Main
-from .setting import Config
+
 # import argparse
 # ap = argparse.ArgumentParser()
 
@@ -9,7 +9,6 @@ from .setting import Config
 # args = vars(ap.parse_args())
 
 def main():
-    Config("config")
     mainUi = Ui_Main(480,800)
     mainUi.startUi()
 
