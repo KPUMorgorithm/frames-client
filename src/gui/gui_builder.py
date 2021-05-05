@@ -3,38 +3,46 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class GuiBuilder:
     def __init__(self):
         pass
-
+    
     @staticmethod
-    def makeBoxLayoutIn(parent, isVertical : bool):
+    def __isWidget(parent) -> bool:
+        if isinstance(parent, QtWidgets.QWidget):
+            return True
+        else:
+            return False
+
+
+    @classmethod
+    def makeBoxLayoutIn(cls, parent, isVertical : bool):
         box : QtWidgets.QBoxLayout = None
         
-        if isinstance(parent, QtWidgets.QLayout):
+        if cls.__isWidget(parent):
+            if isVertical:
+                box = QtWidgets.QVBoxLayout(parent)
+            else:
+                box = QtWidgets.QHBoxLayout(parent)
+        else:
             if isVertical:
                 box = QtWidgets.QVBoxLayout()
             else:
                 box = QtWidgets.QHBoxLayout()
 
             parent.addLayout(box)
-
-        elif isinstance(parent, QtWidgets.QWidget):
-            if isVertical:
-                box = QtWidgets.QVBoxLayout(parent)
-            else:
-                box = QtWidgets.QHBoxLayout(parent)
-
-        if box is None:
-            return 
         
         box.setSpacing(5)
         box.setContentsMargins(5,5,5,5)
         return box
 
-    @staticmethod
-    def makeLabelIn(parent : QtWidgets.QLayout , text , alignFlag : QtCore.Qt.AlignmentFlag):
-        label = QtWidgets.QLabel(text)
-        label.setAlignment(alignFlag)
-        parent.addWidget(label)
+    @classmethod
+    def makeLabelIn(cls, parent , text , alignFlag : QtCore.Qt.AlignmentFlag):
+        
+        if cls.__isWidget(parent):
+            label = QtWidgets.QLabel(text,parent)
+        else: 
+            label = QtWidgets.QLabel(text)
+            parent.addWidget(label)
 
+        label.setAlignment(alignFlag)
         return label
 
     @staticmethod
