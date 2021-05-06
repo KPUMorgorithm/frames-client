@@ -9,11 +9,14 @@ class SettingWindow(QtWidgets.QDialog):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.initUI()
 
+        with open('client/qss/main_stylesheet.qss',"r") as f:
+            self.setStyleSheet(f.read())
+    
+
     #/device/facility?deviceId=~~&~~~
     def initUI(self):
 
         mainVBox = GuiBuilder.makeBoxLayoutIn(self, True)
-
         facilityGroupBox = GuiBuilder.makeGroupBoxIn(mainVBox)
         facilityVBox = GuiBuilder.makeBoxLayoutIn(facilityGroupBox, True)
         facilitySelectHBox = GuiBuilder.makeBoxLayoutIn(facilityVBox, False)

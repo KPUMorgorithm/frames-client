@@ -8,8 +8,11 @@ class QRWindow(QtWidgets.QDialog):
 
     def __init__(self):
         super().__init__()
-
+        
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+        with open('client/qss/main_stylesheet.qss',"r") as f:
+            self.setStyleSheet(f.read())
 
         mainVBox = GuiBuilder.makeBoxLayoutIn(self, True)
         

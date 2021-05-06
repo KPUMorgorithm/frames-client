@@ -5,7 +5,7 @@ from client.view.requestView import RequestLayout
 from client.model.request.requestHelper import Request
 from client.model.request.requestResultQueue import ResultQueue
 
-from client.src.state_stylesheet import StateStyleSheet
+from client.qss.state_qssDict import StateStyleSheet
 
 import threading
 
@@ -33,7 +33,7 @@ class RequestViewModel:
 
     def _checkQueue(self):
         th = threading.Thread(target=self.__checkQueue)
-        th.start()
+        # th.start()
     
     def __checkQueue(self):
         while True:

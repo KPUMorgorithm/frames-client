@@ -16,8 +16,11 @@ class Ui_Main(object):
 
 class Ui_MainWidget(QtWidgets.QWidget):
 
-    def __init__(self, W, H):
-        super().__init__()
+    def __init__(self, W, H, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        with open('client/qss/main_stylesheet.qss',"r") as f:
+            self.setStyleSheet(f.read())
 
         self._addContents()
 
@@ -26,7 +29,6 @@ class Ui_MainWidget(QtWidgets.QWidget):
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         # self.showFullScreen()
-        # QRWindow("https://naver.com")
 
     def _addContents(self):
         
@@ -35,4 +37,4 @@ class Ui_MainWidget(QtWidgets.QWidget):
         factory.makeTitleBarModule(vbox, 0.5)
         factory.makeVideoModule(vbox, stretch=14)
         factory.makeRequestModule(vbox, 5)
-        # factory.makeQRWindow("https://naver.com")
+        factory.makeQRWindow("https://naver.com")
