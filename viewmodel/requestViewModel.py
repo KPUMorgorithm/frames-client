@@ -18,13 +18,15 @@ class RequestViewModel:
 
     cssDict : dict
 
+    beforState : int
+
     def __init__(self,view: RequestLayout, vd, tp, config):
         self.cssDict = StateStyleSheet()
         self.LB_title = view.getLB_title()
         self.LB_subtitle = view.getLB_subtitle()
         self.GB_labelBox = view.getGB_labelBox()
+        self.beforState = -1
         self._initRequestModule(vd,tp, config)
-
 
     def _initRequestModule(self, vd, tp,config ):       
         request = Request(vd,tp, self.resultQueue, config)
@@ -33,16 +35,22 @@ class RequestViewModel:
 
     def _checkQueue(self):
         th = threading.Thread(target=self.__checkQueue)
-        # th.start()
+        th.start()
     
     def __checkQueue(self):
         while True:
-            if self.resultQueue.isExistData():
-                self._updateView(self.resultQueue.getData())
+            data = self.resultQueue.getData()
+            if data is None:
+                continue
+            self._updateView(data)
 
 
     def _updateView(self, data):
         state, title, subtitle = data
+        if(self.beforState == state):
+            return
+        print("update")        
+        self.beforState = state
         self.__changeStyleSheet(state)
 
         self.LB_title.setText(title)

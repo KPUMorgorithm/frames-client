@@ -1,4 +1,5 @@
 from queue import Queue
+from threading import Lock
 
 class ResultQueue(Queue):
 
@@ -11,7 +12,9 @@ class ResultQueue(Queue):
         return True
     
     def __addDatainQueueBy(self, data : tuple):
-        self.put(data)
+        with Lock():
+            self.put(data)
+            self.join()
 
     def addDataWhenChecked(self,temperature, name):
         #TODO: Unknown일 땐?
@@ -27,5 +30,11 @@ class ResultQueue(Queue):
         self.__addDatainQueueBy((3, "  ", "체온이 측정되지 않았습니다")) # 실패 (체온미측정)
         
     def getData(self) -> tuple:
-        if self.isExistData():
-            return self.get()
+        # if self.isExistData():
+        #     return self.get()
+        with Lock():
+            item = self.get()
+            if item is None:
+                return
+            self.task_done()
+            return item
