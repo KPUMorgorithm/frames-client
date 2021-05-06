@@ -1,11 +1,11 @@
 from PyQt5 import QtGui, QtCore
-from client.src.temperature.temperature import Temperature
-from client.video.view import VideoLabel
-from client.video.video import Video
+from client.model.temperatureModel import Temperature
+from client.view.videoView import VideoLabel
+from client.model.videoModel import Video
 import cv2
 import threading
 
-class VideoController:
+class VideoViewModel:
 
     view : VideoLabel
     vd : Video

@@ -1,15 +1,15 @@
 from PyQt5 import QtWidgets
 
-from client.request.view import RequestLayout
+from client.view.requestView import RequestLayout
 
-from client.request.requests import Request
-from client.request.resultQueue import ResultQueue
+from client.model.request.requestHelper import Request
+from client.model.request.requestResultQueue import ResultQueue
 
-from client.request.state_stylesheet import StateStyleSheet
+from client.src.state_stylesheet import StateStyleSheet
 
 import threading
 
-class RequestController:
+class RequestViewModel:
     resultQueue = ResultQueue()
 
     LB_title : QtWidgets.QLabel

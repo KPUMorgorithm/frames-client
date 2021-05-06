@@ -19,7 +19,7 @@ class Config():
     __configName : str
 
     def __init__(self, configName):
-        self.__configName = 'client/src/config/'+configName+'.ini'
+        self.__configName = 'client/config/'+configName+'.ini'
         self.iniLoad()
 
     def iniLoad(self):

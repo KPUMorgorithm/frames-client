@@ -1,4 +1,3 @@
-from client.src.temperature.temperature import Temperature
 from PyQt5 import QtWidgets
 
 class VideoLabel(QtWidgets.QLabel):

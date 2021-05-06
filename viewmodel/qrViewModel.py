@@ -1,8 +1,8 @@
-from client.QR.qrcode import QRBuilder
-from client.QR.view import QRWindow
+from client.model.qr.qrHelper import QRHelper
+from client.view.qrView import QRWindow
 from PyQt5 import  QtWidgets
 
-class QRController:
+class QRViewModel:
     view: QRWindow
     LB_img : QtWidgets.QLabel
     Btn_close : QtWidgets.QPushButton
@@ -17,7 +17,7 @@ class QRController:
         self.view.exec_()
     
     def updateView(self, url):
-        self.LB_img.setPixmap(QRBuilder.makeQRPixmapBy(url))
+        self.LB_img.setPixmap(QRHelper.makeQRPixmapBy(url))
     
     def event_exit(self):
         self.view.close()

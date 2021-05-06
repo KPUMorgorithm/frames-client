@@ -1,4 +1,4 @@
-from .main.gui_main import Ui_Main
+from client.mainModule import Ui_Main
 
 def main():
     mainUi = Ui_Main(480,800)
