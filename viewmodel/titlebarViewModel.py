@@ -1,7 +1,7 @@
-from client.titlebar.view import TitleBarLayout
+from client.view.titlebarView import TitleBarLayout
 from PyQt5 import QtWidgets
 
-class TitleBarController:
+class TitleBarViewModel:
     view : TitleBarLayout
 
     Btn_setting : QtWidgets.QPushButton

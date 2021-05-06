@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
-from client.src.gui.gui_builder import GuiBuilder
+from client.src.gui_builder import GuiBuilder
 
 class SettingWindow(QtWidgets.QDialog):
 

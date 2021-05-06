@@ -1,10 +1,10 @@
-from client.src.config.config import Config
+from client.config.config import Config
 import cv2
 import requests
 import threading
 import time
 
-from client.request.resultQueue import ResultQueue
+from client.model.request.requestResultQueue import ResultQueue
 
 class Request:
     def __init__(self, vd, tp, rq, config, ip='http://192.168.0.30:5000/match'):

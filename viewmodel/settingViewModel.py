@@ -1,7 +1,7 @@
-from client.settings.view import SettingWindow
+from client.view.settingView import SettingWindow
 from PyQt5 import QtWidgets
 
-class SettingController:
+class SettingViewModel:
 
     Btn_fNum : QtWidgets.QRadioButton
     Btn_fName : QtWidgets.QRadioButton

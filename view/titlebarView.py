@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-from client.src.gui.gui_builder import GuiBuilder
+from client.src.gui_builder import GuiBuilder
 
 
 class TitleBarLayout(QtWidgets.QHBoxLayout):
@@ -13,10 +13,10 @@ class TitleBarLayout(QtWidgets.QHBoxLayout):
         self.addWidget(QtWidgets.QFrame(), stretch=8)
 
         self.Btn_setting = GuiBuilder.makePushButtonIn(
-            self, 1, 'client/titlebar/resource/settings.png', "Setting")
+            self, 1, 'client/resource/settings.png', "Setting")
 
         self.Btn_exit = GuiBuilder.makePushButtonIn(
-            self, 1, 'client/titlebar/resource/exit.png', "Exit")
+            self, 1, 'client/resource/exit.png', "Exit")
         self.Btn_exit.setStyleSheet("background-color: red;")
 
         parent.addLayout(self,stretch = stretch)
