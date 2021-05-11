@@ -22,7 +22,8 @@ class SettingWindow(QtWidgets.QDialog):
         facilitySelectHBox = GuiBuilder.makeBoxLayoutIn(facilityVBox, False)
         self.Btn_fNum = GuiBuilder.makeRadioButton(facilitySelectHBox,"건물 번호")
         self.Btn_fName = GuiBuilder.makeRadioButton(facilitySelectHBox,"건물 이름")
-        self.LE_facilityEdit = GuiBuilder.makeLineEditIn(facilityVBox,1,"0")
+        self.LE_facilityEdit = GuiBuilder.makeLineEditIn(facilityVBox,1,"산학융합관")
+        self.LE_facilityEdit.setContentsMargins(20,0,20,0)
 
         stateGroupBox = GuiBuilder.makeGroupBoxIn(mainVBox)
         stateSelectHBox = GuiBuilder.makeBoxLayoutIn(stateGroupBox, False)
