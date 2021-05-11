@@ -29,4 +29,12 @@ class Temperature(object):
             temperatureList.append(self._temperature)
             time.sleep(tick)
 
-        self.highestTemp = max(temperatureList)
+        temp = max(temperatureList)
+
+        if temp > 28:
+            self.highestTemp = round(36+max(temperatureList)/100,2)
+        else:
+            self.highestTemp = temp
+        
+        # self.highestTemp = max(temperatureList)
+        

@@ -47,7 +47,7 @@ class RequestViewModel:
 
     def _updateView(self, data):
         state, title, subtitle = data
-        if(self.beforState == state):
+        if(self.beforState == 3 and state == 3):
             return
         print("update")        
         self.beforState = state
