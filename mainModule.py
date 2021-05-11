@@ -37,4 +37,4 @@ class Ui_MainWidget(QtWidgets.QWidget):
         factory.makeTitleBarModule(vbox, 0.5)
         factory.makeVideoModule(vbox, stretch=14)
         factory.makeRequestModule(vbox, 5)
-        factory.makeQRWindow("https://naver.com")
+        # factory.makeQRWindow("https://naver.com")

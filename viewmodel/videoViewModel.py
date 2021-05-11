@@ -50,6 +50,7 @@ class VideoViewModel:
         qp = QtGui.QPainter(pixmap)
 
         tem = self.tp.highestTemp
+        
         qp.setPen(self._selectPenByTem(tem))
         qp.setFont(QtGui.QFont("Arial", 30))
         try:
