@@ -22,8 +22,8 @@ class Request:
 
     def _reqSendFrame(self,sendCycle, timeout):
         try:
-
-            temperature = self.__tp.highestTemp
+            with threading.Lock():
+                temperature = self.__tp.highestTemp
 
             if(temperature <= self.__threshold):
                 raise Exception('Low Temperature')

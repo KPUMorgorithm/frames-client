@@ -18,31 +18,32 @@ from client.model.temperatureModel import Temperature
 from client.viewmodel.requestViewModel import RequestViewModel
 from client.view.requestView import RequestLayout
 
-class SingletonInstane(type):
-    _instance = {}
+from client.src.main_threadpool import MainThreadPool
+from client.src.singleton_instance import SingletonInstane
 
-    def __call__(cls, *args, **kwargs):
-
-        if cls not in cls._instance:
-            cls._instance[cls] = super(SingletonInstane, cls).__call__(*args, **kwargs)
-        return cls._instance[cls]
-
+LIBTEMPATH = "client/lib/temperature/temperature.dll"
 class LayoutFactory(metaclass = SingletonInstane):
     
     def __init__(self):
-        self.tp = Temperature("client/lib/temperature/temperature.dll")
         self.vd = Video()
+        self.tp = Temperature(LIBTEMPATH)
         self.config = Config("config")
-        
+        self.thPool = MainThreadPool(10)
+
+        self.thPool.addThreadPool(self.vd.run)
+        self.thPool.addThreadPool(self.tp.checkHighestTemp)
+
         print("LayoutFactory 생성됨(싱글톤 확인용)")
 
     def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
-        RequestViewModel(view,self.vd,self.tp,self.config)
+        vm = RequestViewModel(view,self.vd,self.tp,self.config)
+        self.thPool.addThreadPool(vm.checkQueue)
     
     def makeVideoModule(self, parent, stretch):
         view = VideoLabel(parent, stretch)
-        VideoViewModel(view, self.vd, self.tp)
+        vm = VideoViewModel(view, self.vd, self.tp)
+        self.thPool.addThreadPool(vm.updateView)
 
     def makeTitleBarModule(self, parent, stretch):
         view = TitleBarLayout(parent, stretch)
@@ -50,9 +51,11 @@ class LayoutFactory(metaclass = SingletonInstane):
     
     @classmethod
     def makeQRWindow(cls, url):
+        #TODO 위치 조정(클라이언트 가운데로)
         view = QRWindow()
         QRViewModel(view, url)
 
     def makeSettingWindow(self):
+        #TODO 위치 조정(클라이언트 가운데로)
         view = SettingWindow()
         SettingViewModel(view)
