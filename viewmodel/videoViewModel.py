@@ -3,7 +3,6 @@ from client.model.temperatureModel import Temperature
 from client.view.videoView import VideoLabel
 from client.model.videoModel import Video
 import cv2
-import threading
 
 class VideoViewModel:
 
@@ -16,13 +15,7 @@ class VideoViewModel:
         self.vd = vd
         self.tp = tp
 
-        self.updateView()
-
     def updateView(self):
-        th = threading.Thread(target=self._updateView)
-        th.start()
-
-    def _updateView(self):
         while True:
             frame = self.vd.getFrame()
             if frame is None:
