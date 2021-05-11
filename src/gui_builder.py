@@ -34,7 +34,7 @@ class GuiBuilder:
         return box
 
     @classmethod
-    def makeLabelIn(cls, parent , text , alignFlag : QtCore.Qt.AlignmentFlag):
+    def makeLabelIn(cls, parent , text , alignFlag = QtCore.Qt.AlignLeft):
         
         if cls.__isWidget(parent):
             label = QtWidgets.QLabel(text,parent)
