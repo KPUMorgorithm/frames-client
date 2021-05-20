@@ -32,7 +32,7 @@ class TitleBarViewModel:
 
     def event_BTN_exit(self):
         self.closeFunc()
-        time.sleep(5)
+        time.sleep(1)
         self.view.parent().parent().close()
 
 
