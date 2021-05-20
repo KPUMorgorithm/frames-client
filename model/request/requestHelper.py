@@ -14,7 +14,7 @@ class Request:
         self.__resultQueue : ResultQueue = rq
         self.__config : Config = config
         self.__threshold = 30.0
-
+        self.running = True
 
     def reqSendFrame(self, sendCycle, timeout):
         th = threading.Thread(target=self._reqSendFrame, args=(sendCycle,timeout))
@@ -66,4 +66,5 @@ class Request:
             self.__resultQueue.addDataWhenLowTemperature()
 
         finally:
-            threading.Timer(sendCycle,self._reqSendFrame, args=(sendCycle,timeout)).start()
+            if self.running:
+                threading.Timer(sendCycle,self._reqSendFrame, args=(sendCycle,timeout)).start()
