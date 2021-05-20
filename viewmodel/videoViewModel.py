@@ -15,8 +15,11 @@ class VideoViewModel:
         self.vd = vd
         self.tp = tp
 
+    def stopVideo(self):
+        self.vd.running = False
+
     def updateView(self):
-        while True:
+        while self.vd.running:
             frame = self.vd.getFrame()
             if frame is None:
                 continue
@@ -36,13 +39,13 @@ class VideoViewModel:
 
         qImg = QtGui.QImage(frame.data, w,h, bytePerLine ,QtGui.QImage.Format_RGB888)
         pixmap = QtGui.QPixmap.fromImage(qImg)
-
         return pixmap
 
     def drawTemperatureOn(self, pixmap):
         qp = QtGui.QPainter(pixmap)
 
-        tem = self.tp.highestTemp
+        # tem = self.tp.highestTemp
+        tem = 36.5
         
         qp.setPen(self._selectPenByTem(tem))
         qp.setFont(QtGui.QFont("Arial", 30))
