@@ -22,14 +22,18 @@ class RequestViewModel:
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
         self.beforeState = -1
-        self._initRequestModule(vd,tp, config)
 
-    def _initRequestModule(self, vd, tp,config ):       
-        request = Request(vd,tp, self.resultQueue, config)
-        request.reqSendFrame(sendCycle=1,timeout=3)
+        self.running = True
 
+        self.request = Request(vd,tp, self.resultQueue, config)
+        self.request.reqSendFrame(sendCycle=1,timeout=3)
+
+    def stopRequest(self):
+        self.running = False 
+        self.request.running = False
+        
     def checkQueue(self):
-        while True:
+        while self.running:
             data = self.resultQueue.getData()
             if data is None:
                 continue
