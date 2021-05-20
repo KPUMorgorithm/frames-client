@@ -31,6 +31,7 @@ class RequestViewModel:
     def stopRequest(self):
         self.running = False 
         self.request.running = False
+        
     def checkQueue(self):
         while self.running:
             data = self.resultQueue.getData()

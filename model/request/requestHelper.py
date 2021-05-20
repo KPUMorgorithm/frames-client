@@ -22,16 +22,18 @@ class Request:
 
     def _reqSendFrame(self,sendCycle, timeout):
         try:
-            with threading.Lock():
-                temperature = self.__tp.highestTemp
+            # with threading.Lock():
+            #     temperature = self.__tp.highestTemp
+            temperature = 36.5
 
             if(temperature <= self.__threshold):
                 raise Exception('Low Temperature')
-
+            
             _, img_encoded = cv2.imencode('.jpg', self.__vd.getFrame())
             t = time.time()
 
-            file = {'frame' : ('frame.jpg', img_encoded, 'image/jpeg')}
+            # TODO: tobytes가 맞나..?
+            file = {'frame' : ('frame.jpg', img_encoded.tobytes(), 'image/jpeg')}
 
             data = {
                 "temperature" : temperature,
@@ -63,6 +65,7 @@ class Request:
             print('Error :',e,"cv2 error")
 
         except Exception as e:
+            print(e)
             self.__resultQueue.addDataWhenLowTemperature()
 
         finally:
