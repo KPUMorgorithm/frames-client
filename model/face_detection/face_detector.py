@@ -15,18 +15,18 @@ class FaceDetector:
 
         print("Face Detector 클래스 생성 완료")
     
-    def GetDetectionsFromFrame(self, frame):
+    def getDetectionsFromFrame(self, frame):
         blob = cv2.dnn.blobFromImage(frame, 1.0, (300,300), (104.0,177.0,123.0))
         self.__net.setInput(blob)
         detections = self.__net.forward()#순방향 추론
         return detections[0,0]
     
     @staticmethod
-    def GetConfidence(detection):
+    def getConfidence(detection):
         return detection[2]
 
     @staticmethod
-    def GetFaceLocation(detection, frame):
+    def getFaceLocation(detection, frame):
         (height,width) = np.shape(frame)[:2]
         faceLocation  = detection[3:7] * np.array([width,height,width,height])
         (left, top, right, bottom) = faceLocation.astype("int")
@@ -38,7 +38,7 @@ class FaceDetector:
         return (left,top,right,bottom)
 
     @staticmethod    
-    def GetFaceLocationForMD(detection, frame):
+    def getFaceLocationForMD(detection, frame):
 
         faceLocation = FaceDetector.GetFaceLocation(detection,frame)
         (left, top, right, bottom) = faceLocation
