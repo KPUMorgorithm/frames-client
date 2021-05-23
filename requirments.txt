@@ -1,0 +1,5 @@
+qrcode==6.1
+PyQt5
+face_recognition
+#opencv2>=2.4 https://jo631.github.io/jetson/2021/05/23/opencv-in-jetson/
+#tensorflow<=2.5 https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html
