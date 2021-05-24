@@ -39,7 +39,9 @@ class Video(metaclass = SingletonInstane):
     def __del__(self):
         self.stop()
         self.cam.release()
-        cv2.destroyAllWindows()
+        del self.cam
+        del self
+        # cv2.destroyAllWindows()
 
     def stop(self):
         self.running = False
