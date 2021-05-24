@@ -42,6 +42,7 @@ class LayoutFactory(metaclass = SingletonInstane):
         view = RequestLayout(parent,stretch)
         vm = RequestViewModel(view,self.vd,self.tp,self.config)
         self.thPool.addThreadPool(vm.checkQueue)
+        self.thPool.addThreadPool(vm.detectFrame)
         self.thPool.addKillThreadFunc(vm.stopRequest)
     
     def makeVideoModule(self, parent, stretch):
