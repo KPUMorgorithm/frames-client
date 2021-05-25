@@ -34,22 +34,24 @@ class Video(metaclass = SingletonInstane):
         self.frame = None
         self.cam = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
         self.running = True
-        print("Video 모델")
+        print("Video Model 생성됨")
     
     def __del__(self):
-        self.stop()
-        self.cam.release()
-        del self.cam
-        del self
+        print("Video Model 삭제됨")
         # cv2.destroyAllWindows()
 
     def stop(self):
         self.running = False
+        self.cam.release()
+        del self.cam
+        del self
 
     def getFrame(self):
         return self.frame
 
     def run(self):
         while self.running:   
-            _, self.frame = self.cam.read()
+            _, frame = self.cam.read()
+            frame = cv2.flip(frame, 1)
+            self.frame = frame
             
