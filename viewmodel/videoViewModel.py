@@ -35,8 +35,7 @@ class VideoViewModel:
             
         frame = cv2.resize(frame, dsize=(w,h))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame = cv2.flip(frame, 1)
-
+        
         qImg = QtGui.QImage(frame.data, w,h, bytePerLine ,QtGui.QImage.Format_RGB888)
         pixmap = QtGui.QPixmap.fromImage(qImg)
         return pixmap

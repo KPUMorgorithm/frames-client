@@ -44,11 +44,19 @@ class RequestViewModel:
             temperature = 36.5
             # temperature = self.__tp.getTemperature
             frame = self.__vd.getFrame()
+
             detection = self.detectionHelper.getFaceDetectionFrom(frame)
             if detection is None:
+                del frame
                 continue
             face = self.detectionHelper.getFaceFrom(detection, frame)
+            del frame
             landmark = self.detectionHelper.getLandmarkBy(face)
+            del face
+            if landmark is None:
+                del landmark
+                continue
+
             self.request.requestLandmarkAndTemperature(landmark, temperature)
 
 

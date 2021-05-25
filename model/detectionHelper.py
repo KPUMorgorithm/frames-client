@@ -6,7 +6,11 @@ class DetectionHelper:
     def __init__(self):
         self.fd = FaceDetector('client/model/face_detection/deploy.prototxt','client/model/face_detection/res10_300x300_ssd_iter_140000.caffemodel')
         # self.md = MaskDetector('client/model/mask_detection/mask_detector.model')
-    
+        print("DetectionHelper 생성")
+
+    def __del__(self):
+        print("DetectionHelper 삭제")
+
     def getFaceDetectionFrom(self, frame, threshold = 0.6):
         detections = self.fd.getDetectionsFromFrame(frame)
         detection, confidence = None, 0
@@ -18,7 +22,6 @@ class DetectionHelper:
                 continue
             if confidence < c:
                 detection = d
-        print(detection)
         return detection
     
     def getFaceFrom(self, detection, frame):
@@ -27,9 +30,7 @@ class DetectionHelper:
 
         (left,top,right,bottom) = self.fd.getFaceLocation(detection,frame)
         face = frame[top:bottom,left:right]
-        print(face)
         return face
-
     def isMasked(self, face):
         mask, withoutMask = self.md.maskDetection(face)
         if(mask>withoutMask):
@@ -39,3 +40,6 @@ class DetectionHelper:
 
     def getLandmarkBy(self, face):
         return LandmarkDetector.getLandmarkBy(face)
+
+    # def testMethod(self, frame):
+    #     return LandmarkDetector.test(frame)

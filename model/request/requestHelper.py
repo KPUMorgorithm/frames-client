@@ -15,22 +15,22 @@ class Request:
         if(temperature <= self.__threshold):
             self.__resultQueue.addDataWhenLowTemperature()
             return
-
         try:        
             data = {
-                    "landmark" : landmark,
+                    "landmark" : self.__refineLandmark(landmark),
                     "temperature" : temperature,
                     "facilityNum" : self.__config.getFacilityNum(),
                     "state" : self.__config.getState()
                     }
             t = time.time()
             res = requests.post(ip,
-                        data = data,
+                        json = data,
                         timeout=timeout)
             print('request time : ', time.time() - t)
             
-            name = res.json()['data']
-
+            data = res.json()['data']
+            name = data[0]
+            print(name)
             self.__resultQueue.addDataWhenChecked(temperature,name)
 
         except requests.exceptions.Timeout:
@@ -39,3 +39,6 @@ class Request:
 
         except Exception as e:
             print(e)
+
+    def __refineLandmark(self, landmark):
+        return landmark[0].tolist()
