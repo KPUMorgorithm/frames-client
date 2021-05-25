@@ -1,5 +1,4 @@
 import cv2
-import time
 from client.src.singleton_instance import SingletonInstane
 
 def gstreamer_pipeline(
@@ -38,13 +37,10 @@ class Video(metaclass = SingletonInstane):
     
     def __del__(self):
         print("Video Model 삭제됨")
-        # cv2.destroyAllWindows()
 
     def stop(self):
         self.running = False
         self.cam.release()
-        del self.cam
-        del self
 
     def getFrame(self):
         return self.frame

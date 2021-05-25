@@ -33,8 +33,7 @@ class LayoutFactory(metaclass = SingletonInstane):
 
         self.thPool.addThreadPool(self.vd.run)
         # self.thPool.addThreadPool(self.tp.checkHighestTemp)
-
-        self.thPool.addKillThreadFunc(self.__killSelf)
+        self.thPool.addKillThreadFunc(self.vd.stop)
 
         print("LayoutFactory 생성됨(싱글톤 확인용)")
 
@@ -65,6 +64,3 @@ class LayoutFactory(metaclass = SingletonInstane):
         #TODO 위치 조정(클라이언트 가운데로)
         view = SettingWindow()
         SettingViewModel(view)
-
-    def __killSelf(self):
-        del self
