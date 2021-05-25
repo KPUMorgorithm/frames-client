@@ -29,7 +29,7 @@ class Request:
             print('request time : ', time.time() - t)
             
             data = res.json()['data']
-            name = data[0][0]
+            name = data[0]
             print(name)
             self.__resultQueue.addDataWhenChecked(temperature,name)
 
