@@ -5,6 +5,8 @@ from client.view.requestView import RequestLayout
 from client.model.request.requestHelper import Request
 from client.model.request.requestResultQueue import ResultQueue
 
+from client.model.detectionHelper import DetectionHelper
+
 from client.qss.state_qssDict import StateStyleSheet
 
 class RequestViewModel:
@@ -25,13 +27,31 @@ class RequestViewModel:
 
         self.running = True
 
-        self.request = Request(vd,tp, self.resultQueue, config)
-        self.request.reqSendFrame(sendCycle=1,timeout=3)
+        self.__vd = vd
+        self.__tp = tp
+
+        self.request = Request(self.resultQueue, config)
+        self.detectionHelper = DetectionHelper()
 
     def stopRequest(self):
         self.running = False 
-        self.request.running = False
-        
+        del self.request
+        del self.detectionHelper
+        del self
+
+    def detectFrame(self):
+        while self.running:
+            temperature = 36.5
+            # temperature = self.__tp.getTemperature
+            frame = self.__vd.getFrame()
+            detection = self.detectionHelper.getFaceDetectionFrom(frame)
+            if detection is None:
+                continue
+            face = self.detectionHelper.getFaceFrom(detection, frame)
+            landmark = self.detectionHelper.getLandmarkBy(face)
+            self.request.requestLandmarkAndTemperature(landmark, temperature)
+
+
     def checkQueue(self):
         while self.running:
             data = self.resultQueue.getData()

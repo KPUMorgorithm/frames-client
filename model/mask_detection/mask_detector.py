@@ -1,14 +1,10 @@
-# from tensorflow.keras.models import load_model
-# from tensorflow.keras.preprocessing.image import img_to_array
-# from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import numpy as np
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
+# import os
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
 import tensorflow as tf
 import cv2
 class MaskDetector:
     def __init__(self, modelPath):
-        # self._model = tf.keras.models.load_model(modelPath)
         with tf.device('/gpu:0'):
             self._model = tf.keras.models.load_model(modelPath)
         if self._model is None:

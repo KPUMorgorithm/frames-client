@@ -36,14 +36,3 @@ class FaceDetector:
         right = min(width-1,right.item())        
 
         return (left,top,right,bottom)
-
-    @staticmethod    
-    def getFaceLocationForMD(detection, frame):
-
-        faceLocation = FaceDetector.GetFaceLocation(detection,frame)
-        (left, top, right, bottom) = faceLocation
-        face = frame[top:bottom,left:right]
-        face = cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
-        face = cv2.resize(face, (224, 224))
-
-        return face
