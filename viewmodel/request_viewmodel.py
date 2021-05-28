@@ -42,8 +42,8 @@ class RequestViewModel:
         while self.running:
             temperature = 36.5
             # temperature = self.__tp.getTemperature
-
-            landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame())
+            # landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame(),self.__vd.getLock())
+            landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.frame,self.__vd.lock)
 
             if landmark is None:
                 del landmark
@@ -52,13 +52,15 @@ class RequestViewModel:
             RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
                                             landmark, temperature)
 
+            self._updateView(self.resultQueue.getData())
 
     def checkQueue(self):
-        while self.running:
-            data = self.resultQueue.getData()
-            if data is None:
-                continue
-            self._updateView(data)
+        # while self.running:
+        #     data = self.resultQueue.getData()
+        #     if data is None:
+        #         continue
+        #     self._updateView(data)
+        pass
 
     def _updateView(self, data):
         state, text = data
