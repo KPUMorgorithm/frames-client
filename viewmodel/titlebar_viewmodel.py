@@ -2,9 +2,6 @@ from typing import Callable
 from client.view.titlebar_view import TitleBarLayout
 from PyQt5 import QtWidgets
 
-from client.view.qr_view import QRWindow
-from client.viewmodel.qr_viewmodel import QRViewModel
-
 import time
 
 class TitleBarViewModel:
@@ -24,7 +21,6 @@ class TitleBarViewModel:
         self.closeFunc = closeFunc
 
         self.connectEvent(settingFunc)
-        self.evnet_BTN_test()
 
     def connectEvent(self,settingFunc):
         self.Btn_exit.clicked.connect(lambda: self.event_BTN_exit())
@@ -35,7 +31,6 @@ class TitleBarViewModel:
         time.sleep(1)
         self.view.parent().parent().close()
 
-
-    def evnet_BTN_test(self):
-        view = QRWindow()
-        self.view.Btn_Test.clicked.connect(lambda: QRViewModel(view, "https://naver.com"))
+    # def evnet_BTN_test(self):
+    #     view = QRWindow()
+    #     self.view.Btn_Test.clicked.connect(lambda: QRViewModel(view, "https://naver.com"))
