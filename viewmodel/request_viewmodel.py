@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 
 from client.view.request_view import RequestLayout
 
-from client.model.request.request_helper import Request
+from client.model.request.request_helper import RequestHelper
 from client.model.request.request_result_queue import ResultQueue
 
 from client.model.detection.detection_helper import DetectionHelper
@@ -30,7 +30,8 @@ class RequestViewModel:
         self.__vd = vd
         self.__tp = tp
 
-        self.request = Request(self.resultQueue, config)
+        self.__config = config
+
         self.detectionHelper = DetectionHelper()
 
     def stopRequest(self):
@@ -57,7 +58,8 @@ class RequestViewModel:
                 del landmark
                 continue
 
-            self.request.requestLandmarkAndTemperature(landmark, temperature)
+            RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
+                                            landmark, temperature)
 
 
     def checkQueue(self):
