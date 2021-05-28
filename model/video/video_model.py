@@ -1,5 +1,4 @@
 import threading
-import time
 import cv2
 from client.src.singleton_instance import SingletonInstane
 
@@ -38,15 +37,13 @@ class Video(metaclass = SingletonInstane):
 
     def stop(self):
         self.running = False
-        # self.lock.acquire()
         self.cam.release()
-        # self.lock.release()
 
-    # def getFrame(self):
-    #     # self.lock.acquire() 
-    #     # frame = self.frame.copy()
-    #     # self.lock.release()
-    #     return self.frame
+    def getFrame(self):
+        self.lock.acquire() 
+        frame = self.frame.copy()
+        self.lock.release()
+        return frame
 
     def getLock(self):
         return self.lock

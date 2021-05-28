@@ -1,4 +1,3 @@
-import threading
 from PyQt5 import QtGui, QtCore
 from client.model.temperature.temperature_model import Temperature
 from client.view.video_view import VideoLabel
@@ -21,11 +20,7 @@ class VideoViewModel:
 
     def updateView(self):
         while self.vd.running:
-            # frame = self.vd.getFrame()
-            self.vd.lock.acquire()
-            frame = self.vd.frame.copy()
-            self.vd.lock.release()
-            print("update video view")
+            frame = self.vd.getFrame()
             if frame is None:
                 continue
             
