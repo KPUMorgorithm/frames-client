@@ -11,7 +11,18 @@ class DetectionHelper:
     def __del__(self):
         print("DetectionHelper 삭제")
 
-    def getFaceDetectionFrom(self, frame, threshold = 0.6):
+    def detectLandmarkFromFrame(self, frame,threshold=0.6):
+        detection = self.__getFaceDetectionFrom(frame, threshold)
+
+        if detection is None:
+            del frame
+            return
+
+        face = self.__getFaceFrom(detection, frame)
+
+        return self.__getLandmarkBy(face)
+
+    def __getFaceDetectionFrom(self, frame, threshold):
         detections = self.fd.getDetectionsFromFrame(frame)
         detection, confidence = None, 0
 
@@ -24,22 +35,18 @@ class DetectionHelper:
                 detection = d
         return detection
     
-    def getFaceFrom(self, detection, frame):
-        if detection is None:
-            return None
-
+    def __getFaceFrom(self, detection, frame):
         (left,top,right,bottom) = self.fd.getFaceLocation(detection,frame)
         face = frame[top:bottom,left:right]
+        del frame
         return face
-    def isMasked(self, face):
+
+    def __isMasked(self, face):
         mask, withoutMask = self.md.maskDetection(face)
         if(mask>withoutMask):
             return True
         else:
             return False
 
-    def getLandmarkBy(self, face):
+    def __getLandmarkBy(self, face):
         return LandmarkDetector.getLandmarkBy(face)
-
-    # def testMethod(self, frame):
-    #     return LandmarkDetector.test(frame)
