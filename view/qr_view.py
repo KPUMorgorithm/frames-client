@@ -6,12 +6,12 @@ class QRWindow(QtWidgets.QDialog):
     LB_img : QtWidgets.QLabel
     Btn_close : QtWidgets.QPushButton
 
-    def __init__(self):
+    def __init__(self, qssPath):
         super().__init__()
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 
-        with open('client/resource/qss/main_stylesheet.qss',"r") as f:
+        with open(qssPath,"r") as f:
             self.setStyleSheet(f.read())
 
         mainVBox = GuiBuilder.makeBoxLayoutIn(self, True)
