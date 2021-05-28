@@ -1,5 +1,5 @@
-from client.model.qr.qrHelper import QRHelper
-from client.view.qrView import QRWindow
+from client.model.qr.qr_helper import QRHelper
+from client.view.qr_view import QRWindow
 from PyQt5 import  QtWidgets
 
 class QRViewModel:

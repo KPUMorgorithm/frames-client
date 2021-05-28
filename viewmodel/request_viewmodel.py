@@ -1,13 +1,13 @@
 from PyQt5 import QtWidgets
 
-from client.view.requestView import RequestLayout
+from client.view.request_view import RequestLayout
 
-from client.model.request.requestHelper import Request
-from client.model.request.requestResultQueue import ResultQueue
+from client.model.request.request_helper import RequestHelper
+from client.model.request.request_result_queue import ResultQueue
 
-from client.model.detectionHelper import DetectionHelper
+from client.model.detection.detection_helper import DetectionHelper
 
-from client.qss.state_qssDict import StateStyleSheet
+from client.resource.qss.state_qss_dict import StateStyleSheet
 
 class RequestViewModel:
     resultQueue = ResultQueue()
@@ -30,42 +30,37 @@ class RequestViewModel:
         self.__vd = vd
         self.__tp = tp
 
-        self.request = Request(self.resultQueue, config)
+        self.__config = config
+
         self.detectionHelper = DetectionHelper()
 
     def stopRequest(self):
-        self.running = False 
-        del self.request
+        self.running = False
         del self.detectionHelper
-        del self
 
     def detectFrame(self):
         while self.running:
             temperature = 36.5
             # temperature = self.__tp.getTemperature
-            frame = self.__vd.getFrame()
+            # landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame(),self.__vd.getLock())
+            landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.frame,self.__vd.lock)
 
-            detection = self.detectionHelper.getFaceDetectionFrom(frame)
-            if detection is None:
-                del frame
-                continue
-            face = self.detectionHelper.getFaceFrom(detection, frame)
-            del frame
-            landmark = self.detectionHelper.getLandmarkBy(face)
-            del face
             if landmark is None:
                 del landmark
                 continue
 
-            self.request.requestLandmarkAndTemperature(landmark, temperature)
+            RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
+                                            landmark, temperature)
 
+            self._updateView(self.resultQueue.getData())
 
     def checkQueue(self):
-        while self.running:
-            data = self.resultQueue.getData()
-            if data is None:
-                continue
-            self._updateView(data)
+        # while self.running:
+        #     data = self.resultQueue.getData()
+        #     if data is None:
+        #         continue
+        #     self._updateView(data)
+        pass
 
     def _updateView(self, data):
         state, text = data
