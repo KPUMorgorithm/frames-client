@@ -29,7 +29,7 @@ class LayoutFactory(metaclass = SingletonInstane):
         # self.tp = Temperature(LIBTEMPATH)
         self.tp = None
         self.config = Config("config")
-        self.thPool = MainThreadPool(10)
+        self.thPool = MainThreadPool(20)
 
         self.thPool.addThreadPool(self.vd.run)
         # self.thPool.addThreadPool(self.tp.checkHighestTemp)
@@ -40,7 +40,7 @@ class LayoutFactory(metaclass = SingletonInstane):
     def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
         vm = RequestViewModel(view,self.vd,self.tp,self.config)
-        self.thPool.addThreadPool(vm.checkQueue)
+        # self.thPool.addThreadPool(vm.checkQueue)
         self.thPool.addThreadPool(vm.detectFrame)
         self.thPool.addKillThreadFunc(vm.stopRequest)
     
