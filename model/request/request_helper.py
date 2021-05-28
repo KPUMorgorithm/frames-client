@@ -2,7 +2,7 @@ from client.config.config import Config
 import requests
 import time
 
-from client.model.request.requestResultQueue import ResultQueue
+from client.model.request.request_result_queue import ResultQueue
 
 class Request:
     def __init__(self, rq, config,threshold = 30.0):

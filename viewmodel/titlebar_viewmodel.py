@@ -1,9 +1,9 @@
 from typing import Callable
-from client.view.titlebarView import TitleBarLayout
+from client.view.titlebar_view import TitleBarLayout
 from PyQt5 import QtWidgets
 
-from client.view.qrView import QRWindow
-from client.viewmodel.qrViewModel import QRViewModel
+from client.view.qr_view import QRWindow
+from client.viewmodel.qr_viewmodel import QRViewModel
 
 import time
 

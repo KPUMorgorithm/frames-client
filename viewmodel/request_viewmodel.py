@@ -1,13 +1,13 @@
 from PyQt5 import QtWidgets
 
-from client.view.requestView import RequestLayout
+from client.view.request_view import RequestLayout
 
-from client.model.request.requestHelper import Request
-from client.model.request.requestResultQueue import ResultQueue
+from client.model.request.request_helper import Request
+from client.model.request.request_result_queue import ResultQueue
 
-from client.model.detectionHelper import DetectionHelper
+from client.model.detection.detection_helper import DetectionHelper
 
-from client.qss.state_qssDict import StateStyleSheet
+from client.resource.qss.state_qss_dict import StateStyleSheet
 
 class RequestViewModel:
     resultQueue = ResultQueue()

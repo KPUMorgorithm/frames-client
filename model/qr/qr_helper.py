@@ -1,6 +1,6 @@
 from PyQt5 import QtGui
 import qrcode
-from client.model.qr.Image import Image
+from client.model.qr.image import Image
 
 class QRHelper:
 

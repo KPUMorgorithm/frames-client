@@ -1,4 +1,4 @@
-from client.view.settingView import SettingWindow
+from client.view.setting_view import SettingWindow
 from PyQt5 import QtWidgets
 
 class SettingViewModel:
@@ -20,7 +20,7 @@ class SettingViewModel:
         self.LE_fEdit = view.getLEfEdit()
 
         view.getBtnClose().clicked.connect(lambda: self.view.close())
-        view.getBtnSave().clicked.connect(lambda: self.__eventSaveBtn)
+        view.getBtnSave().clicked.connect(lambda: self.__eventSaveBtn())
         # str(self.__config.getFacilityNum()
         self.view.exec_()
 
