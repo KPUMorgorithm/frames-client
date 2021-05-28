@@ -33,16 +33,6 @@ class Config():
         except KeyError:
             self.iniMakeDefault()
 
-
-    def setStateIn(self):
-        self._iniSave(self.__facilityNum, State.IN.value)
-    
-    def setStateOut(self):
-        self._iniSave(self.__facilityNum, State.OUT.value)
-
-    def setFacilityNum(self, fNum):
-        self._iniSave(fNum, self.__state)
-
     def getFacilityNum(self):
         return self.__facilityNum
     
@@ -56,6 +46,9 @@ class Config():
         uuid = subprocess.check_output('/usr/bin/uuid').decode('utf-8').split('\n')[0]
         self._iniSave(0,State.DEFAULT.value, uuid)
     
+    def iniSave(self, facilityNum, state):
+        self._iniSave(facilityNum,state,self.__uuid)
+
     def _iniSave(self, facilityNum , state, uuid):
         config = configparser.ConfigParser()
         config[SETTING] = {FNUM : facilityNum, STATE : state, UUID : uuid}

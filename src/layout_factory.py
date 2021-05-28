@@ -65,4 +65,4 @@ class LayoutFactory(metaclass = SingletonInstane):
     def makeSettingWindow(self):
         #TODO 위치 조정(클라이언트 가운데로)
         view = SettingWindow(QSSPATH)
-        SettingViewModel(view)
+        SettingViewModel(view, self.config)
