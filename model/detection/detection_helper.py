@@ -1,4 +1,3 @@
-import threading
 from client.model.detection.face_detection.face_detector import FaceDetector
 from client.model.detection.mask_detection.mask_detector import MaskDetector
 from client.model.detection.landmark_detection.landmark_detector import LandmarkDetector
@@ -12,11 +11,7 @@ class DetectionHelper:
     def __del__(self):
         print("DetectionHelper 삭제")
 
-    def detectLandmarkFromFrame(self, frame,lock: threading.Lock,threshold=0.6):
-        lock.acquire()
-        frame = frame.copy()
-        lock.release()
-        print("frame copyed")
+    def detectLandmarkFromFrame(self, frame,threshold=0.6):
         detection = self.__getFaceDetectionFrom(frame, threshold)
 
         if detection is None:

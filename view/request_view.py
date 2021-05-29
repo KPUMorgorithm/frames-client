@@ -20,7 +20,7 @@ class RequestLayout(QtWidgets.QVBoxLayout):
         self.setSpacing(0)
         self.GB_labelBox = GuiBuilder.makeGroupBoxIn(self)
         Vbox = GuiBuilder.makeBoxLayoutIn(self.GB_labelBox, True)
-        self.LB_title = GuiBuilder.makeLabelIn(Vbox, "test", 
+        self.LB_title = GuiBuilder.makeLabelIn(Vbox, "초기화중\n얼굴을 한번 인식해주세요", 
                             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
 

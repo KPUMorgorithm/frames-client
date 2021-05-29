@@ -22,6 +22,8 @@ from client.src.main_threadpool import MainThreadPool
 from client.src.singleton_instance import SingletonInstane
 
 LIBTEMPATH = "client/lib/temperature/temperature.dll"
+QSSPATH = "client/resource/qss/main_stylesheet.qss"
+
 class LayoutFactory(metaclass = SingletonInstane):
     
     def __init__(self):
@@ -57,10 +59,10 @@ class LayoutFactory(metaclass = SingletonInstane):
     @classmethod
     def makeQRWindow(cls, url):
         #TODO 위치 조정(클라이언트 가운데로)
-        view = QRWindow()
+        view = QRWindow(QSSPATH)
         QRViewModel(view, url)
 
     def makeSettingWindow(self):
         #TODO 위치 조정(클라이언트 가운데로)
-        view = SettingWindow()
-        SettingViewModel(view)
+        view = SettingWindow(QSSPATH)
+        SettingViewModel(view, self.config)

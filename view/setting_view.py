@@ -3,13 +3,13 @@ from client.src.gui_builder import GuiBuilder
 
 class SettingWindow(QtWidgets.QDialog):
 
-    def __init__(self):
+    def __init__(self, qssPath):
         super().__init__()
         self.setWindowTitle("Settings")
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.initUI()
 
-        with open('client/resource/qss/main_stylesheet.qss',"r") as f:
+        with open(qssPath,"r") as f:
             self.setStyleSheet(f.read())
     
 
