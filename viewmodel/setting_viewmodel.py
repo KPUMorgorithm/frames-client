@@ -25,9 +25,11 @@ class SettingViewModel:
 
         self.__config = config
 
+
         view.getBtnClose().clicked.connect(lambda: self.view.close())
         view.getBtnSave().clicked.connect(lambda: self.__eventSaveBtn())
         # str(self.__config.getFacilityNum()
+        self.__initLoadConfig()
         self.view.exec_()
 
     def __eventSaveBtn(self):
@@ -48,3 +50,17 @@ class SettingViewModel:
         print(resultState)
         if resultState == State.ACCEPT:
             self.__config.iniSave(text, int(isStateIn))
+            self.view.close()
+
+    def __initLoadConfig(self):
+        fNum = self.__config.getFacilityNum()
+        isStateIn = self.__config.getState()
+
+        if bool(isStateIn):
+            self.Btn_sIn.click()
+        else:
+            self.Btn_sOut.click()
+        
+        self.LE_fEdit.setText(str(fNum)) 
+
+        self.Btn_fNum.click()

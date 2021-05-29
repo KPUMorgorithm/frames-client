@@ -22,7 +22,7 @@ class RequestHelper:
             return State.INPUTERROR, None
 
         # return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
-        return State.ACCEPT, True
+        return State.ACCEPT, isStateIn
 
     @staticmethod
     def __checkConfigVar(fNum, fName, sIn, sOut, text):
