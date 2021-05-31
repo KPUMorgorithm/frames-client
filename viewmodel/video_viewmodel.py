@@ -1,3 +1,4 @@
+import time
 from PyQt5 import QtGui, QtCore
 from client.model.temperature.temperature_model import Temperature
 from client.view.video_view import VideoLabel
@@ -27,6 +28,7 @@ class VideoViewModel:
             pixmap = self.makePixmapBy(frame)
             self.drawTemperatureOn(pixmap)
             self.view.setPixmap(pixmap)
+            time.sleep(1/60)
     
     def makePixmapBy(self,frame):
         

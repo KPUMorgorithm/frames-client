@@ -9,6 +9,8 @@ from client.model.detection.detection_helper import DetectionHelper
 
 from client.resource.qss.state_qss_dict import StateStyleSheet
 
+import time
+
 class RequestViewModel:
     resultQueue = ResultQueue()
 
@@ -47,6 +49,7 @@ class RequestViewModel:
 
             if landmark is None:
                 del landmark
+                time.sleep(1)
                 continue
 
             RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
