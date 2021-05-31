@@ -5,7 +5,7 @@ from client.model.detection.landmark_detection.landmark_detector import Landmark
 class DetectionHelper:
     def __init__(self):
         self.fd = FaceDetector('client/model/detection/face_detection/deploy.prototxt','client/model/detection/face_detection/res10_300x300_ssd_iter_140000.caffemodel')
-        # self.md = MaskDetector('client/model/mask_detection/mask_detector.model')
+        # self.md = MaskDetector('client/model/detection/mask_detection/mask_detector.model')
         print("DetectionHelper 생성")
 
     def __del__(self):

@@ -1,3 +1,4 @@
+from client.model.request.queue_state import *
 from PyQt5 import QtWidgets
 
 from client.view.request_view import RequestLayout
@@ -7,8 +8,6 @@ from client.model.request.request_result_queue import ResultQueue
 
 from client.model.detection.detection_helper import DetectionHelper
 
-from client.resource.qss.state_qss_dict import StateStyleSheet
-
 import time
 
 class RequestViewModel:
@@ -17,12 +16,9 @@ class RequestViewModel:
     LB_text : QtWidgets.QLabel
     GB_labelBox : QtWidgets.QGroupBox
 
-    cssDict : dict
-
-    beforeState : int
+    beforeState : AbstractData
 
     def __init__(self,view: RequestLayout, vd, tp, config):
-        self.cssDict = StateStyleSheet()
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
         self.beforeState = -1
@@ -64,16 +60,12 @@ class RequestViewModel:
         #         continue
         #     self._updateView(data)
 
-    def _updateView(self, data):
-        state, text = data
-        if(self.beforeState == 3 and state == 3):
+    def _updateView(self, data : AbstractData):
+        if(self.beforeState == LowTemperatureStateData and data == LowTemperatureStateData):
             return #체온측정안됐을때
 
         print("update")        
-        self.beforeState = state
-        self.__changeStyleSheet(state)
-
-        self.LB_text.setText(text)
+        self.beforeState = data
+        self.GB_labelBox.setStyleSheet(data.qss)
+        self.LB_text.setText(data.data)
     
-    def __changeStyleSheet(self, state):
-        self.GB_labelBox.setStyleSheet(self.cssDict[state])
