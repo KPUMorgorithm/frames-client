@@ -1,4 +1,4 @@
-from client.model.request.queue_state import AbstractData
+from client.model.request.queue_state import *
 from queue import Queue
 from threading import Lock
 
@@ -21,3 +21,6 @@ class ResultQueue(Queue):
         
         with Lock():
             return self.get()
+    
+    def addDataOfMasked(self):
+        self.addData(MaskedStateData())
