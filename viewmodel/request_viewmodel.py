@@ -8,6 +8,8 @@ from client.model.request.request_result_queue import ResultQueue
 
 from client.model.detection.detection_helper import DetectionHelper
 
+from client.model.temperature.thermal_adapter import TemperatureAdapter
+
 import time
 
 class RequestViewModel:
@@ -21,12 +23,12 @@ class RequestViewModel:
     def __init__(self,view: RequestLayout, vd, tp, config):
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
-        self.beforeState = -1
+        self.beforeState = None
 
         self.running = True
 
         self.__vd = vd
-        self.__tp = tp
+        self.__tp : TemperatureAdapter = tp
 
         self.__config = config
 
@@ -38,18 +40,21 @@ class RequestViewModel:
 
     def detectFrame(self):
         while self.running:
-            temperature = 36.5
-            # temperature = self.__tp.getTemperature
+            temperature = self.__tp.checkTemperature()
+            print('temperature = ',temperature)
+            isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame())
             
-            landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame())
+            if isMasked:
+                self.resultQueue.addDataOfMasked()
+            
+            else:
+                if landmark is None:
+                    del landmark
+                    time.sleep(1)
+                    continue
 
-            if landmark is None:
-                del landmark
-                time.sleep(1)
-                continue
-
-            RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
-                                            landmark, temperature)
+                RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
+                                                landmark, temperature)
 
             self._updateView(self.resultQueue.getData())
 
