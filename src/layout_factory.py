@@ -13,7 +13,7 @@ from client.viewmodel.video_viewmodel import VideoViewModel
 from client.view.video_view import VideoLabel
 
 from client.model.video.video_model import Video
-from client.model.temperature.temperature_model import Temperature
+from client.model.temperature.thermal_adapter import TemperatureAdapter
 
 from client.viewmodel.request_viewmodel import RequestViewModel
 from client.view.request_view import RequestLayout
@@ -28,13 +28,11 @@ class LayoutFactory(metaclass = SingletonInstane):
     
     def __init__(self):
         self.vd = Video()
-        # self.tp = Temperature(LIBTEMPATH)
-        self.tp = None
+        self.tp = TemperatureAdapter()
         self.config = Config("config")
         self.thPool = MainThreadPool(20)
 
         self.thPool.addThreadPool(self.vd.run)
-        # self.thPool.addThreadPool(self.tp.checkHighestTemp)
         self.thPool.addKillThreadFunc(self.vd.stop)
 
         print("LayoutFactory 생성됨(싱글톤 확인용)")

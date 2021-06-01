@@ -1,4 +1,5 @@
 import threading
+import time
 import cv2
 from client.src.singleton_instance import SingletonInstane
 
@@ -54,3 +55,4 @@ class Video(metaclass = SingletonInstane):
             _, frame = self.cam.read()
             self.frame = cv2.flip(frame, 1)
             self.lock.release()
+            time.sleep(1/60)

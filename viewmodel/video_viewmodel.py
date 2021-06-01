@@ -1,5 +1,6 @@
+import time
 from PyQt5 import QtGui, QtCore
-from client.model.temperature.temperature_model import Temperature
+from client.model.temperature.thermal_adapter import TemperatureAdapter
 from client.view.video_view import VideoLabel
 from client.model.video.video_model import Video
 import cv2
@@ -8,7 +9,7 @@ class VideoViewModel:
 
     view : VideoLabel
     vd : Video
-    tp : Temperature
+    tp : TemperatureAdapter
 
     def __init__(self,view: VideoLabel, vd, tp):
         self.view = view
@@ -24,10 +25,20 @@ class VideoViewModel:
             if frame is None:
                 continue
             
+            frame = self.temperatureOnImage(frame)
             pixmap = self.makePixmapBy(frame)
-            self.drawTemperatureOn(pixmap)
             self.view.setPixmap(pixmap)
+            time.sleep(1/60)
     
+    def temperatureOnImage(self, frame):
+        temperatureFrame = self.tp.getFrame()
+        temY, temX = temperatureFrame.shape[0], temperatureFrame.shape[1]
+        frameY, frameX = frame.shape[0], frame.shape[1]
+
+        frame[0:temY, frameX-temX:frameX] = temperatureFrame
+        # frame[0:temX]
+        return frame
+
     def makePixmapBy(self,frame):
         
         w,h = self.view.size().width(), self.view.size().height()
@@ -40,35 +51,3 @@ class VideoViewModel:
         pixmap = QtGui.QPixmap.fromImage(qImg)
         return pixmap
 
-    def drawTemperatureOn(self, pixmap):
-        qp = QtGui.QPainter(pixmap)
-
-        # tem = self.tp.highestTemp
-        tem = 36.5
-        
-        qp.setPen(self._selectPenByTem(tem))
-        qp.setFont(QtGui.QFont("Arial", 30))
-        try:
-            qp.drawText(
-                pixmap.rect(), QtCore.Qt.AlignTop | QtCore.Qt.AlignRight, 
-                str(tem))            
-        except:
-            pass
-        finally:
-            qp.end()
-            
-        return pixmap
-    
-    def _selectPenByTem(self, tem):
-        if tem < 35:
-            color = QtCore.Qt.gray
-        elif tem < 37:
-            color = QtCore.Qt.green
-        elif tem < 37.5:
-            color = QtCore.Qt.yellow
-        else:
-            color = QtCore.Qt.red
-        
-        pen = QtGui.QPen(color, 5)
-
-        return pen
