@@ -5,12 +5,12 @@ from client.model.request.request_config import RequestConfig
 class RequestHelper:  
 
     @staticmethod
-    def requestLandmarkAndTemperature(resultQueue, config, landmark, temperature, 
+    def requestLandmarkAndTemperature(config, landmark, temperature, 
                                     threshold = 30.0, 
                                     ip='http://192.168.0.30:5000/match',
                                     timeout=3):
 
-        RequestLandmark(resultQueue, config).requestLandmark(
+        return RequestLandmark(config).requestLandmark(
                                     landmark,temperature,threshold,ip,timeout)
     
     @staticmethod
