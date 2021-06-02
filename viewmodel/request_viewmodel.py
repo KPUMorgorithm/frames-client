@@ -1,3 +1,4 @@
+from client.model.request.request_register_url import RequestRegister
 from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
 
@@ -17,7 +18,7 @@ class RequestViewModel:
     GB_labelBox : QtWidgets.QGroupBox
 
 
-    def __init__(self,view: RequestLayout, vd, tp, config):
+    def __init__(self,view: RequestLayout, vd, tp, config, qrMakeFunction):
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
 
@@ -29,6 +30,8 @@ class RequestViewModel:
         self.__config = config
 
         self.detectionHelper = DetectionHelper()
+
+        self.__qrMakeFunc = qrMakeFunction
 
     def stopRequest(self):
         self.running = False
@@ -68,11 +71,13 @@ class RequestViewModel:
             print("request None")
             return
     
-        if isinstance(data, UnknownStateData):
-            #Unknown일 때 frame 보내고 QR 출력
-            print(frame)
-
         print("update")        
         self.GB_labelBox.setStyleSheet(data.qss)
         self.LB_text.setText(data.data)
-    
+
+        if isinstance(data, UnknownStateData):
+            url = RequestHelper.requestRegister(frame)
+            # if url is not None:
+            #     self.__qrMakeFunc(url)
+            if url is None:
+                self.__qrMakeFunc("https://naver.com")

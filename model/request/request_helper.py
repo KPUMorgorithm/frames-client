@@ -1,7 +1,7 @@
 from client.model.request.request_config_state import State
 from client.model.request.request_landmark import RequestLandmark
 from client.model.request.request_config import RequestConfig
-
+from client.model.request.request_register_url import RequestRegister
 class RequestHelper:  
 
     @staticmethod
@@ -13,6 +13,10 @@ class RequestHelper:
         return RequestLandmark(config).requestLandmark(
                                     landmark,temperature,threshold,ip,timeout)
     
+    @staticmethod
+    def requestRegister(frame, ip="http://dowo.pw/register", timeout=3):
+        return RequestRegister().requestRegister(frame, ip, timeout)
+
     @staticmethod
     def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw"):
         

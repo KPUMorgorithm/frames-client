@@ -39,7 +39,7 @@ class LayoutFactory(metaclass = SingletonInstane):
 
     def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
-        vm = RequestViewModel(view,self.vd,self.tp,self.config)
+        vm = RequestViewModel(view,self.vd,self.tp,self.config, self.makeQRWindow)
         # self.thPool.addThreadPool(vm.checkQueue)
         self.thPool.addThreadPool(vm.detectFrame)
         self.thPool.addKillThreadFunc(vm.stopRequest)
