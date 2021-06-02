@@ -6,7 +6,22 @@ class AbstractData(metaclass=ABCMeta):
     def __init__(self):
         self.qss = ""
         self.data = ""
-        
+
+class UncheckedLandmarkStateData(AbstractData):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+ 
+        self.data = "얼굴을 화면 중앙에 위치해주세요"
+        self.qss = """
+                width: 100%;
+                color: #FFFFFF;
+                background-color: #ded119;
+                font-weight: bold;
+                font-size: 32px;
+                margin: 0;
+                """
+
 class CheckedStateData(AbstractData):
 
     def __init__(self, temp, name, *args, **kwargs):
@@ -26,8 +41,15 @@ class UnknownStateData(AbstractData):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        #TODO
-        self.qss = None
+        self.data = "인식에 실패했습니다."
+        self.qss = """
+                width: 100%;
+                color: #FFFFFF;
+                background-color: #392f31;
+                font-weight: bold;
+                font-size: 32px;
+                margin: 0;
+                """
 
 class MaskedStateData(AbstractData):
 
