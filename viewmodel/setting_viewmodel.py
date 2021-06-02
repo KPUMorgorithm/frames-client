@@ -40,17 +40,32 @@ class SettingViewModel:
         text = self.LE_fEdit.text()
         # resultState : State = None
 
-        resultState , isStateIn = RequestHelper.requestConfig(self.__config, 
+        requestState , requestValue, isStateIn = RequestHelper.requestConfig(self.__config, 
             self.Btn_fNum.isChecked(),
             self.Btn_fName.isChecked(),
             self.Btn_sIn.isChecked(),
             self.Btn_sOut.isChecked(),
             text)
 
-        print(resultState)
-        if resultState == State.ACCEPT:
+        print(requestState)
+        
+        #상세한거 수정 해야함
+        if requestState == State.ACCEPT:
+            print(requestValue)
             self.__config.iniSave(text, int(isStateIn))
             self.view.close()
+        
+        elif requestState == State.REJECT:
+            print("설정 실패")
+
+        elif requestState == State.SERVERERROR:
+            print("서버 연결 실패")
+        
+        elif requestState == State.INPUTERROR:
+            print("입력값 에러")
+
+        elif requestState == State.EXCEPTION:
+            print("예외")
 
     def __initLoadConfig(self):
         fNum = self.__config.getFacilityNum()
