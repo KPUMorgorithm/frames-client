@@ -14,15 +14,15 @@ class RequestHelper:
                                     landmark,temperature,threshold,ip,timeout)
     
     @staticmethod
-    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip=""):
+    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw"):
         
         isErr, isFnum, isStateIn = RequestHelper.__checkConfigVar(fNum, fName, sIn, sOut, text)
 
         if isErr:
             return State.INPUTERROR, None
 
-        # return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
-        return State.ACCEPT, isStateIn
+        return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
+
 
     @staticmethod
     def __checkConfigVar(fNum, fName, sIn, sOut, text):

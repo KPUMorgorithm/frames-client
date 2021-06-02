@@ -9,23 +9,37 @@ class RequestConfig:
         self.__config : Config = config
 
     def requestConfig(self, isFnum, text, isStateIn, timeout ,ip):
+        
+        if isFnum:
+            ip = ip+"/device"
+        else:
+            ip = ip+"facility"
+        
         data = self.__packData(isFnum,text,isStateIn)
-        print(data)
-        state, res = self.__requestToServer(data, ip, timeout)
 
-        if state is not None:
-            return state
+        requestState, res = self.__requestToServer(data, ip, timeout)
 
-        return self.__unpackResponse(res), isStateIn
+        if requestState is not None:
+            return requestState, res, isStateIn
+
+        requestState, requestValue = self.__unpackResponse(res)
+
+        return requestState, requestValue, isStateIn
 
 
     def __packData(self, isFnum, text, isStateIn):
-        return { 
-            "uuid" : self.__config.getUUID(),
-            "isFnum" : isFnum,
-            "text" : text,
-            "isStateIn" : isStateIn
-        }
+        if isFnum:
+            return { 
+                "deviceId" : self.__config.getUUID(),
+                "bno" : int(text),
+                "state" : bool(isStateIn)
+            }
+        else:
+            return {
+                "deviceId" : self.__config.getUUID(),
+                "facilityName" : text,
+                "state" : bool(isStateIn)
+            }
     
     def __requestToServer(self, data, ip, timeout):
         try:
@@ -39,11 +53,12 @@ class RequestConfig:
         
         except Exception as e:
             print(e)
-            return State.EXCEPTION, None
+            return State.EXCEPTION, e
     
     def __unpackResponse(self, res : requests.Response):
         responseData = res.json()['data']
         
-        #TODO: True False 판별
+        print(responseData)
 
-        return State.ACCEPT
+        #TODO: True False 판별, 3은 bno와 같은 값
+        return State.ACCEPT, 3
