@@ -1,29 +1,28 @@
-from client.model.request.queue_state import CheckedStateData, LowTemperatureStateData, TimeoutStateData, UnknownStateData
 import time
 import requests
 from client.config.config import Config
-from client.model.request.request_result_queue import ResultQueue
-
-from client.model.request.request_result_queue import *
+from client.model.request.request_data_state import *
 
 class RequestLandmark:
-    def __init__(self, resultQueue, config):
-        self.__resultQueue : ResultQueue = resultQueue
+    def __init__(self, config):
+        self.__returnState : AbstractData = None
         self.__config : Config = config
     
     def requestLandmark(self, landmark, temperature, threshold, ip, timeout):
         
         if self.__isNotOverThreshold(temperature, threshold):
-            return
+            return self.__returnState
         
         data = self.__packData(landmark, temperature)
         res = self.__requestToServer(data,ip,timeout)
         self.__unpackResponse(res, temperature)
 
+        return self.__returnState
+
 
     def __isNotOverThreshold(self, temperature, threshold):
         if temperature <= threshold:
-            self.__resultQueue.addData(LowTemperatureStateData())
+            self.__returnState = LowTemperatureStateData()
             return True
         return False
 
@@ -46,7 +45,7 @@ class RequestLandmark:
             return res
 
         except requests.exceptions.Timeout:
-            self.__resultQueue.addData(TimeoutStateData())
+            self.__returnState = TimeoutStateData
             return None
         
         except Exception as e:
@@ -61,9 +60,9 @@ class RequestLandmark:
         name = responseData[0]
 
         if name == "Unknown":
-            self.__resultQueue.addData(UnknownStateData())
+            self.__returnState = UnknownStateData()
         else:
-            self.__resultQueue.addData(CheckedStateData(temperature, name))
+            self.__returnState = CheckedStateData(temperature, name)
 
 
     

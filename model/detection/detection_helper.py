@@ -15,7 +15,6 @@ class DetectionHelper:
         detection = self.__getFaceDetectionFrom(frame, threshold)
 
         if detection is None:
-            del frame
             return False, None
 
         face = self.__getFaceFrom(detection, frame)
@@ -41,7 +40,6 @@ class DetectionHelper:
     def __getFaceFrom(self, detection, frame):
         (left,top,right,bottom) = self.fd.getFaceLocation(detection,frame)
         face = frame[top:bottom,left:right]
-        del frame
         return face
 
     # def __isMasked(self, face):

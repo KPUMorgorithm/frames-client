@@ -28,7 +28,7 @@ class Ui_MainWidget(QtWidgets.QWidget):
         self.resize(W,H)
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        # self.showFullScreen()
+        self.showFullScreen()
 
     def _addContents(self):
         

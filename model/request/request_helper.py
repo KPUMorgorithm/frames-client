@@ -1,28 +1,32 @@
 from client.model.request.request_config_state import State
 from client.model.request.request_landmark import RequestLandmark
 from client.model.request.request_config import RequestConfig
-
+from client.model.request.request_register_url import RequestRegister
 class RequestHelper:  
 
     @staticmethod
-    def requestLandmarkAndTemperature(resultQueue, config, landmark, temperature, 
+    def requestLandmarkAndTemperature(config, landmark, temperature, 
                                     threshold = 30.0, 
                                     ip='http://192.168.0.30:5000/match',
                                     timeout=3):
 
-        RequestLandmark(resultQueue, config).requestLandmark(
+        return RequestLandmark(config).requestLandmark(
                                     landmark,temperature,threshold,ip,timeout)
     
     @staticmethod
-    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip=""):
+    def requestRegister(frame, ip="http://dowo.pw/register", timeout=3):
+        return RequestRegister().requestRegister(frame, ip, timeout)
+
+    @staticmethod
+    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw"):
         
         isErr, isFnum, isStateIn = RequestHelper.__checkConfigVar(fNum, fName, sIn, sOut, text)
 
         if isErr:
             return State.INPUTERROR, None
 
-        # return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
-        return State.ACCEPT, isStateIn
+        return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
+
 
     @staticmethod
     def __checkConfigVar(fNum, fName, sIn, sOut, text):
