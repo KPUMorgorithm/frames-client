@@ -1,10 +1,9 @@
-from client.model.request.queue_state import *
+from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
 
 from client.view.request_view import RequestLayout
 
 from client.model.request.request_helper import RequestHelper
-from client.model.request.request_result_queue import ResultQueue
 
 from client.model.detection.detection_helper import DetectionHelper
 
@@ -13,17 +12,14 @@ from client.model.temperature.thermal_adapter import TemperatureAdapter
 import time
 
 class RequestViewModel:
-    resultQueue = ResultQueue()
 
     LB_text : QtWidgets.QLabel
     GB_labelBox : QtWidgets.QGroupBox
 
-    beforeState : AbstractData
 
     def __init__(self,view: RequestLayout, vd, tp, config):
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
-        self.beforeState = None
 
         self.running = True
 
@@ -39,38 +35,44 @@ class RequestViewModel:
         del self.detectionHelper
 
     def detectFrame(self):
+
+        requestState : AbstractData = None
+        frame = None
+
         while self.running:
+
+            self._updateView(requestState, frame)
+            time.sleep(2)
+
             temperature = self.__tp.checkTemperature()
+            frame = self.__vd.getFrame()
+
             print('temperature = ',temperature)
-            isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(self.__vd.getFrame())
+            isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(frame)
             
             if isMasked:
-                self.resultQueue.addDataOfMasked()
-            
-            else:
-                if landmark is None:
-                    del landmark
-                    time.sleep(1)
-                    continue
+                requestState = MaskedStateData()
+                continue
 
-                RequestHelper.requestLandmarkAndTemperature(self.resultQueue,self.__config,
-                                                landmark, temperature)
+            if landmark is None:
+                # requestState = UncheckedLandmarkStateData()
+                continue
 
-            self._updateView(self.resultQueue.getData())
+            requestState = RequestHelper.requestLandmarkAndTemperature(self.__config,
+                                            landmark, temperature)
 
-    # def checkQueue(self):
-        # while self.running:
-        #     data = self.resultQueue.getData()
-        #     if data is None:
-        #         continue
-        #     self._updateView(data)
 
-    def _updateView(self, data : AbstractData):
-        if(self.beforeState == LowTemperatureStateData and data == LowTemperatureStateData):
-            return #체온측정안됐을때
+    def _updateView(self, data : AbstractData, frame):
+
+        if data is None:
+            print("request None")
+            return
+    
+        if isinstance(data, UnknownStateData):
+            #Unknown일 때 frame 보내고 QR 출력
+            print(frame)
 
         print("update")        
-        self.beforeState = data
         self.GB_labelBox.setStyleSheet(data.qss)
         self.LB_text.setText(data.data)
     
