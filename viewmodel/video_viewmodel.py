@@ -33,10 +33,13 @@ class VideoViewModel:
     def temperatureOnImage(self, frame):
         temperatureFrame = self.tp.getFrame()
         temY, temX = temperatureFrame.shape[0], temperatureFrame.shape[1]
+        temY *= 2
+        temX *= 2
+        temperatureFrame = cv2.resize(temperatureFrame, dsize=(temX, temY))
+
         frameY, frameX = frame.shape[0], frame.shape[1]
 
         frame[0:temY, frameX-temX:frameX] = temperatureFrame
-        # frame[0:temX]
         return frame
 
     def makePixmapBy(self,frame):
