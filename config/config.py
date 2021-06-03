@@ -1,6 +1,7 @@
 import configparser
 from enum import Enum
 import subprocess
+import threading
 
 class State(Enum):
         DEFAULT = -1
@@ -21,7 +22,8 @@ class Config():
     def __init__(self, configName):
         self.__configName = 'client/config/'+configName+'.ini'
         self.iniLoad()
-
+        self.lock = threading.Lock()
+        
     def iniLoad(self):
         try:
             config = configparser.ConfigParser()
@@ -33,14 +35,23 @@ class Config():
         except KeyError:
             self.iniMakeDefault()
 
-    def getFacilityNum(self):
-        return self.__facilityNum
+    def _getFacilityNum(self):
+        self.lock.acquire()
+        fNum = self.__facilityNum
+        self.lock.release()
+        return fNum
     
-    def getState(self):
-        return self.__state
+    def _getState(self):
+        self.lock.acquire()
+        state = self.__state
+        self.lock.release()
+        return state
 
-    def getUUID(self):
-        return self.__uuid
+    def _getUUID(self):
+        self.lock.acquire()
+        uuid = self.__uuid
+        self.lock.release()
+        return uuid
 
     def iniMakeDefault(self):
         uuid = subprocess.check_output('/usr/bin/uuid').decode('utf-8').split('\n')[0]
