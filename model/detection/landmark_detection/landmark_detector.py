@@ -5,12 +5,13 @@ class LandmarkDetector():
     @staticmethod
     def getLandmarkBy(face):
 
-        location = face_locations(face, number_of_times_to_upsample=0)
+        location = face_locations(face, number_of_times_to_upsample=0, model="cnn")
         if location == []:
             return None
         
+        
         print("특징점 추출 완료")
-        return face_encodings(face, location)
+        return face_encodings(face, location, model="large")
 
     # @staticmethod
     # def test(frame):

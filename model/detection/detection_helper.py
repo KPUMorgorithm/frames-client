@@ -16,13 +16,13 @@ class DetectionHelper:
 
         if detection is None:
             return False, None
-
         face = self.__getFaceFrom(detection, frame)
 
         # if self.__isMasked(face):
         #     return True, None
+        landmark = self.__getLandmarkBy(face)
 
-        return False, self.__getLandmarkBy(face)
+        return False, landmark
 
     def __getFaceDetectionFrom(self, frame, threshold):
         detections = self.fd.getDetectionsFromFrame(frame)

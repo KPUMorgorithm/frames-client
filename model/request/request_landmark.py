@@ -12,11 +12,9 @@ class RequestLandmark:
         
         if self.__isNotOverThreshold(temperature, threshold):
             return self.__returnState
-        
         data = self.__packData(landmark, temperature)
         res = self.__requestToServer(data,ip,timeout)
         self.__unpackResponse(res, temperature)
-
         return self.__returnState
 
 
@@ -45,7 +43,8 @@ class RequestLandmark:
             return res
 
         except requests.exceptions.Timeout:
-            self.__returnState = TimeoutStateData
+            self.__returnState = TimeoutStateData()
+            print('timeout')
             return None
         
         except Exception as e:
