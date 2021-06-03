@@ -33,6 +33,9 @@ class RequestRegister:
             return None
 
     def __unpackResponse(self, res : requests.Response):
+        if res is None:
+            return None
+
         responseData = res.json()['data']
         print(responseData)
         return "https://naver.com"

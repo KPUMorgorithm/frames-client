@@ -37,10 +37,9 @@ class Video(metaclass = SingletonInstane):
         print("Video Model 삭제됨")
 
     def stop(self):
-        self.lock.acquire()
         self.running = False
         self.cam.release()
-        self.lock.release()
+        
     def getFrame(self):
         self.lock.acquire() 
         frame = self.frame.copy()
