@@ -35,19 +35,19 @@ class Config():
         except KeyError:
             self.iniMakeDefault()
 
-    def _getFacilityNum(self):
+    def getFacilityNum(self):
         self.lock.acquire()
         fNum = self.__facilityNum
         self.lock.release()
         return fNum
     
-    def _getState(self):
+    def getState(self):
         self.lock.acquire()
         state = self.__state
         self.lock.release()
         return state
 
-    def _getUUID(self):
+    def getUUID(self):
         self.lock.acquire()
         uuid = self.__uuid
         self.lock.release()
