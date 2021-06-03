@@ -1,4 +1,3 @@
-from client.model.request.request_register_url import RequestRegister
 from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
 
@@ -45,6 +44,7 @@ class RequestViewModel:
         while self.running:
 
             self._updateView(requestState, frame)
+            requestState = None
             time.sleep(2)
 
             temperature = self.__tp.checkTemperature()
@@ -63,7 +63,8 @@ class RequestViewModel:
 
             requestState = RequestHelper.requestLandmarkAndTemperature(self.__config,
                                             landmark, temperature)
-
+            time.sleep(1)
+            
 
     def _updateView(self, data : AbstractData, frame):
 
@@ -71,13 +72,17 @@ class RequestViewModel:
             print("request None")
             return
     
-        print("update")        
+        print("update")
+        print(data.data)        
         self.GB_labelBox.setStyleSheet(data.qss)
         self.LB_text.setText(data.data)
 
         if isinstance(data, UnknownStateData):
+            print('Unknown')
             url = RequestHelper.requestRegister(frame)
             # if url is not None:
             #     self.__qrMakeFunc(url)
             if url is None:
-                self.__qrMakeFunc("https://naver.com")
+                self.running = False
+                self.running = self.__qrMakeFunc("https://naver.com")
+                print(self.running)

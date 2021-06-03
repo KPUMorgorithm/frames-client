@@ -59,6 +59,7 @@ class LayoutFactory(metaclass = SingletonInstane):
         #TODO 위치 조정(클라이언트 가운데로)
         view = QRWindow(QSSPATH)
         QRViewModel(view, url)
+        return True
 
     def makeSettingWindow(self):
         #TODO 위치 조정(클라이언트 가운데로)
