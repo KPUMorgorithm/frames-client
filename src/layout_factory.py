@@ -18,41 +18,31 @@ from client.model.temperature.thermal_adapter import TemperatureAdapter
 from client.viewmodel.request_viewmodel import RequestViewModel
 from client.view.request_view import RequestLayout
 
-from client.src.main_threadpool import MainThreadPool
 from client.src.singleton_instance import SingletonInstane
 
-LIBTEMPATH = "client/lib/temperature/temperature.dll"
 QSSPATH = "client/resource/qss/main_stylesheet.qss"
 
 class LayoutFactory(metaclass = SingletonInstane):
     
     def __init__(self):
         self.vd = Video()
+        self.vd.start()
         self.tp = TemperatureAdapter()
         self.config = Config("config")
-        self.thPool = MainThreadPool(20)
-
-        self.thPool.addThreadPool(self.vd.run)
-        self.thPool.addKillThreadFunc(self.vd.stop)
 
         print("LayoutFactory 생성됨(싱글톤 확인용)")
 
     def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
-        vm = RequestViewModel(view,self.vd,self.tp,self.config, self.makeQRWindow)
-        # self.thPool.addThreadPool(vm.checkQueue)
-        self.thPool.addThreadPool(vm.detectFrame)
-        self.thPool.addKillThreadFunc(vm.stopRequest)
-    
+        RequestViewModel(view,self.vd,self.tp,self.config, self.makeQRWindow)
+
     def makeVideoModule(self, parent, stretch):
         view = VideoLabel(parent, stretch)
-        vm = VideoViewModel(view, self.vd, self.tp)
-        self.thPool.addThreadPool(vm.updateView)
-        self.thPool.addKillThreadFunc(vm.stopVideo)
-
+        VideoViewModel(view, self.vd, self.tp)
+        
     def makeTitleBarModule(self, parent, stretch):
         view = TitleBarLayout(parent, stretch)
-        TitleBarViewModel(view, self.makeSettingWindow, self.thPool.killAllThread)
+        TitleBarViewModel(view, self.makeSettingWindow, self.killFunc)
     
     @classmethod
     def makeQRWindow(cls, url):
@@ -65,3 +55,8 @@ class LayoutFactory(metaclass = SingletonInstane):
         #TODO 위치 조정(클라이언트 가운데로)
         view = SettingWindow(QSSPATH)
         SettingViewModel(view, self.config)
+
+    def killFunc(self):
+        self.vd.running=False
+        self.vd.stop()
+        del self.tp

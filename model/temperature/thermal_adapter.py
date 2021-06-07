@@ -1,5 +1,5 @@
 from client.model.temperature.thermal import *
-import threading
+from threading import Lock
 class TemperatureAdapter:
 
     def __init__(self):
@@ -7,7 +7,7 @@ class TemperatureAdapter:
         self.toggleUnitState = 'C'
         self.minVal = 0
         self.maxVal = 0
-        self.lock = threading.Lock()
+        self.lock = Lock()
         startStream()
 
     def getFrame(self):

@@ -1,5 +1,6 @@
 from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
 
 from client.view.request_view import RequestLayout
 
@@ -9,21 +10,26 @@ from client.model.detection.detection_helper import DetectionHelper
 
 from client.model.temperature.thermal_adapter import TemperatureAdapter
 
-import time
+import numpy as np
 
-class RequestViewModel:
+class RequestViewModel(QObject):
 
     LB_text : QtWidgets.QLabel
     GB_labelBox : QtWidgets.QGroupBox
 
 
     def __init__(self,view: RequestLayout, vd, tp, config, qrMakeFunction):
+        
+        super().__init__(view)
+        
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
 
         self.running = True
 
         self.__vd = vd
+        self.__vd.requestSignal.connect(self.detectFrame)
+
         self.__tp : TemperatureAdapter = tp
 
         self.__config = config
@@ -36,35 +42,29 @@ class RequestViewModel:
         self.running = False
         del self.detectionHelper
 
-    def detectFrame(self):
+    @pyqtSlot(np.ndarray)
+    def detectFrame(self, frame):
 
-        requestState : AbstractData = None
-        frame = None
+        if self.running == False:
+            return
 
-        while self.running:
+        requestState = None
+        temperature = self.__tp.checkTemperature()
+        print('temperature = ',temperature)
+        isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(frame)
+        
+        if isMasked:
+            requestState = MaskedStateData()
 
-            self._updateView(requestState, frame)
-            requestState = None
-            time.sleep(2)
-
-            temperature = self.__tp.checkTemperature()
-            frame = self.__vd.getFrame()
-
-            print('temperature = ',temperature)
-            isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(frame)
-            
-            if isMasked:
-                requestState = MaskedStateData()
-                continue
-
-            if landmark is None:
-                # requestState = UncheckedLandmarkStateData()
-                continue
-
+        elif landmark is None:
+            # requestState = UncheckedLandmarkStateData()
+            pass
+        else:
             requestState = RequestHelper.requestLandmarkAndTemperature(self.__config,
-                                            landmark, temperature)
-            time.sleep(1)
-            
+                                                landmark, temperature)
+
+        self._updateView(requestState, frame)
+
 
     def _updateView(self, data : AbstractData, frame):
 
@@ -85,4 +85,3 @@ class RequestViewModel:
             if url is None:
                 self.running = False
                 self.running = self.__qrMakeFunc("https://naver.com")
-                print(self.running)
