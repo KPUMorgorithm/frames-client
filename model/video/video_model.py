@@ -27,6 +27,7 @@ def gstreamer_pipeline(
 class Video(QThread):
 
     signal = pyqtSignal(np.ndarray)
+    requestSignal = pyqtSignal(np.ndarray)
 
     def __init__(self, parent = None):
         super(Video, self).__init__(parent)
@@ -43,11 +44,21 @@ class Video(QThread):
     def stop(self):
         self.running = False
         self.cam.release()
+        time.sleep(3)
 
     def run(self):
+        tick = 0
         while self.running:  
             ok, frame = self.cam.read()
+            frame = cv2.flip(frame, 1)
             if ok:
-                self.signal.emit(cv2.flip(frame, 1))
+                self.signal.emit(frame)
+            
+            if tick==60:
+                tick=0
+                self.requestSignal.emit(frame)
+            else:
+                tick+=1
+
             del frame
             time.sleep(1/20)
