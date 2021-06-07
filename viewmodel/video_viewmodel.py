@@ -1,34 +1,37 @@
-import time
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from client.model.temperature.thermal_adapter import TemperatureAdapter
 from client.view.video_view import VideoLabel
 from client.model.video.video_model import Video
 import cv2
+import numpy as np
 
-class VideoViewModel:
+class VideoViewModel(QObject):
 
     view : VideoLabel
     vd : Video
     tp : TemperatureAdapter
 
-    def __init__(self,view: VideoLabel, vd, tp):
-        self.view = view
-        self.vd = vd
+    pixmapSignal = pyqtSignal(QtGui.QPixmap)
+
+    def __init__(self,view, vd, tp):
+        
+        super().__init__(view)
+
+        self.view : VideoLabel = view
+        self.vd  : Video = vd
         self.tp = tp
+        
+        self.vd.signal.connect(self.updateView)
+        self.pixmapSignal.connect(self.view.setPixmap)
 
-    def stopVideo(self):
-        self.vd.running = False
+    @pyqtSlot(np.ndarray)
+    def updateView(self, frame):
+        frame = self.temperatureOnImage(frame)
+        pixmap = self.__makePixmapBy(frame)
 
-    def updateView(self):
-        while self.vd.running:
-            frame = self.vd.getFrame()
-            if frame is None:
-                continue
-            
-            frame = self.temperatureOnImage(frame)
-            pixmap = self.makePixmapBy(frame)
-            self.view.setPixmap(pixmap)
-            time.sleep(1/60)
+        self.pixmapSignal.emit(pixmap)
+
     
     def temperatureOnImage(self, frame):
         temperatureFrame = self.tp.getFrame()
@@ -42,7 +45,7 @@ class VideoViewModel:
         frame[0:temY, frameX-temX:frameX] = temperatureFrame
         return frame
 
-    def makePixmapBy(self,frame):
+    def __makePixmapBy(self,frame):
         
         w,h = self.view.size().width(), self.view.size().height()
         bytePerLine = frame.shape[2] * w

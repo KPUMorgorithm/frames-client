@@ -1,7 +1,7 @@
-import cv2
-from PyQt5.QtCore import QThread, pyqtSignal
-import numpy as np
+import threading
 import time
+import cv2
+from client.src.singleton_instance import SingletonInstane
 
 def gstreamer_pipeline(
     capture_width=1280,
@@ -9,7 +9,7 @@ def gstreamer_pipeline(
     display_width=1280,
     display_height=720,
     framerate=60,
-    flip_method=0,
+    flip_method=2,
 ):
     return (
         "nvarguscamerasrc sensor-mode=5 ! "
@@ -24,30 +24,35 @@ def gstreamer_pipeline(
         "video/x-raw, format=(string)BGR ! appsink"
     )
 
-class Video(QThread):
-
-    signal = pyqtSignal(np.ndarray)
-
-    def __init__(self, parent = None):
-        super(Video, self).__init__(parent)
+class Video(metaclass = SingletonInstane):
+    def __init__(self):
         self.frame = None
         self.cam = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
         self.running = True
-        
+
+        self.lock = threading.Lock()
         print("Video Model 생성됨")
     
     def __del__(self):
         print("Video Model 삭제됨")
-        self.cam.release()
 
     def stop(self):
         self.running = False
         self.cam.release()
+        
+    def getFrame(self):
+        self.lock.acquire() 
+        frame = self.frame.copy()
+        self.lock.release()
+        return frame
+
+    def getLock(self):
+        return self.lock
 
     def run(self):
         while self.running:  
-            ok, frame = self.cam.read()
-            if ok:
-                self.signal.emit(cv2.flip(frame, 1))
-            del frame
-            time.sleep(1/20)
+            self.lock.acquire() 
+            _, frame = self.cam.read()
+            self.frame = cv2.flip(frame, 1)
+            self.lock.release()
+            time.sleep(1/60)
