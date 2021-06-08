@@ -46,5 +46,5 @@ class DetectionHelper:
         w,h = frame.shape[:2]
         if w+h>300:
             return True
-        print(f"not Enough size = {w+h}")
+        print(f"Not Enough Frame Size = {w+h}")
         return False
