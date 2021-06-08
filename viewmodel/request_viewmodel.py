@@ -51,17 +51,18 @@ class RequestViewModel(QObject):
         requestState = None
         temperature = self.__tp.checkTemperature()
         print('temperature = ',temperature)
-        isMasked, landmark = self.detectionHelper.detectLandmarkFromFrame(frame)
-        
-        if isMasked:
-            requestState = MaskedStateData()
 
-        elif landmark is None:
-            # requestState = UncheckedLandmarkStateData()
-            pass
-        else:
-            requestState = RequestHelper.requestLandmarkAndTemperature(self.__config,
-                                                landmark, temperature)
+        face = self.detectionHelper.detectFaceFromFrame(frame)
+        
+        # if isMasked:
+        #     requestState = MaskedStateData()
+
+        # elif landmark is None:
+        #     # requestState = UncheckedLandmarkStateData()
+        #     pass
+
+        requestState = RequestHelper.requestFaceAndTemperature(self.__config,
+                                            face, temperature)
 
         self._updateView(requestState, frame)
 
