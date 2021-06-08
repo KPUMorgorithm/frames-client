@@ -17,8 +17,11 @@ class DetectionHelper:
             return None
 
         face = self.__getFaceFrom(detection, frame)
-
-        return face
+        
+        if self.__isEnoughSize(face):
+            return face
+        else:
+            return None
 
     #return type: 1-dimension ndarray
     def __getFaceDetectionFrom(self, frame, threshold):
@@ -27,7 +30,6 @@ class DetectionHelper:
 
         for d in detections:
             c = self.fd.getConfidence(d)
-            #TODO 프레임 크기 일정이상 요구할수도 있음 
             if c < threshold:
                 continue
             if confidence < c:
@@ -40,12 +42,9 @@ class DetectionHelper:
         face = frame[top:bottom,left:right]
         return face
 
-    # def __isMasked(self, face):
-    #     mask, withoutMask = self.md.maskDetection(face)
-    #     if(mask>withoutMask):
-    #         return True
-    #     else:
-    #         return False
-
-    # def __getLandmarkBy(self, face):
-    #     return LandmarkDetector.getLandmarkBy(face)
+    def __isEnoughSize(self, frame):
+        w,h = frame.shape[:2]
+        if w+h>300:
+            return True
+        print(f"not Enough size = {w+h}")
+        return False
