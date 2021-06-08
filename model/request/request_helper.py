@@ -1,22 +1,25 @@
 from client.model.request.request_config_state import State
-from client.model.request.request_landmark import RequestLandmark
+from client.model.request.request_face import RequestFace
 from client.model.request.request_config import RequestConfig
 from client.model.request.request_register_url import RequestRegister
 class RequestHelper:  
 
+    # return data state(model/request/request_data_state)
     @staticmethod
-    def requestLandmarkAndTemperature(config, landmark, temperature, 
+    def requestFaceAndTemperature(config, face, temperature, 
                                     threshold = 30.0, 
                                     ip='http://192.168.0.30:5000/match',
                                     timeout=3):
 
-        return RequestLandmark(config).requestLandmark(
-                                    landmark,temperature,threshold,ip,timeout)
+        return RequestFace(config).requestFaceFrame(
+                                    face,temperature,threshold,ip,timeout)
     
+    # return str(url)
     @staticmethod
     def requestRegister(frame, ip="http://dowo.pw/register", timeout=3):
         return RequestRegister().requestRegister(frame, ip, timeout)
 
+    # return config state(model/request/request_config_state) 
     @staticmethod
     def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw"):
         
