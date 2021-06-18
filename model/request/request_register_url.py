@@ -33,9 +33,6 @@ class RequestRegister:
             return None
 
     def __unpackResponse(self, res : requests.Response):
-        if res is None:
-            return None
         if res.ok:
-            print(res.text)
             return True, "http://dowo.pw"+res.text
         return False, None
