@@ -42,15 +42,19 @@ class RequestViewModel(QObject):
         self.running = False
         del self.detectionHelper
 
+    def stopReq(self):
+        self.running = False
+    
+    def startReq(self):
+        self.running = True
+
     @pyqtSlot(np.ndarray)
     def detectFrame(self, frame):
-
         if self.running == False:
             return
 
         requestState = None
         temperature = self.__tp.checkTemperature()
-        # temperature = 36.5
 
         print('temperature = ',temperature)
 
@@ -76,7 +80,7 @@ class RequestViewModel(QObject):
         if isinstance(data, UnknownStateData):
             print('Unknown')
             ok, url = RequestHelper.requestRegister(frame)
-            print(url)
             if ok:
                 self.running = False
                 self.__qrMakeFunc(url)
+                self.running = True
