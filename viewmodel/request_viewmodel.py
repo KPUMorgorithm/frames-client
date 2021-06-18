@@ -50,16 +50,11 @@ class RequestViewModel(QObject):
 
         requestState = None
         temperature = self.__tp.checkTemperature()
+        # temperature = 36.5
+
         print('temperature = ',temperature)
 
         face = self.detectionHelper.detectFaceFromFrame(frame)
-        
-        # if isMasked:
-        #     requestState = MaskedStateData()
-
-        # elif landmark is None:
-        #     # requestState = UncheckedLandmarkStateData()
-        #     pass
 
         requestState = RequestHelper.requestFaceAndTemperature(self.__config,
                                             face, temperature)
@@ -80,9 +75,8 @@ class RequestViewModel(QObject):
 
         if isinstance(data, UnknownStateData):
             print('Unknown')
-            url = RequestHelper.requestRegister(frame)
-            # if url is not None:
-            #     self.__qrMakeFunc(url)
-            if url is None:
+            ok, url = RequestHelper.requestRegister(frame)
+            print(url)
+            if ok:
                 self.running = False
-                self.running = self.__qrMakeFunc("https://naver.com")
+                self.__qrMakeFunc(url)
