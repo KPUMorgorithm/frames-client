@@ -35,10 +35,9 @@ class TitleBarViewModel:
 
     def changeLabel(self):
         self.view.LB_fName.setText(self.config.getFacilityName())
-        
+        print("called")
         state = self.config.getState()
-        text = ""
-        print(type(state))
+        text = "기기를 등록해주세요"
         if state==State.IN:
             text="입장"
         elif state==State.OUT:
