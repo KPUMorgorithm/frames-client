@@ -35,7 +35,8 @@ class LayoutFactory(metaclass = SingletonInstane):
 
     def makeRequestModule(self, parent, stretch):
         view = RequestLayout(parent,stretch)
-        RequestViewModel(view,self.vd,self.tp,self.config, self.makeQRWindow)
+        vm = RequestViewModel(view,self.vd,self.tp,self.config, self.makeQRWindow)
+        self.reqStart, self.reqStop = vm.startReq, vm.stopReq
 
     def makeVideoModule(self, parent, stretch):
         view = VideoLabel(parent, stretch)
@@ -55,8 +56,11 @@ class LayoutFactory(metaclass = SingletonInstane):
 
     def makeSettingWindow(self):
         #TODO 위치 조정(클라이언트 가운데로)
+        self.reqStop()
+        print(self.run)
         view = SettingWindow(QSSPATH)
         SettingViewModel(view, self.config, self.changeFunc)
+        self.reqStart()
 
     def killFunc(self):
         self.vd.running=False
