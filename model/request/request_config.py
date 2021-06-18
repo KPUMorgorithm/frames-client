@@ -13,7 +13,7 @@ class RequestConfig:
         if isFnum:
             ip = ip+"/device"
         else:
-            ip = ip+"facility"
+            ip = ip+"/facility"
         
         data = self.__packData(isFnum,text,isStateIn)
 
@@ -56,9 +56,13 @@ class RequestConfig:
             return State.EXCEPTION, e
     
     def __unpackResponse(self, res : requests.Response):
-        responseData = res.json()['data']
-        
+        print(res)
+        responseData = res.text
         print(responseData)
-
-        #TODO: True False 판별, 3은 bno와 같은 값
-        return State.ACCEPT, 3
+        
+        if res.ok:
+            #TODO: True False 판별, 3은 bno와 같은 값
+            return State.ACCEPT, 3
+        
+        return State.REJECT, None
+        
