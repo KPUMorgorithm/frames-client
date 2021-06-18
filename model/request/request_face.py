@@ -9,7 +9,6 @@ class RequestFace:
         self.__returnState : AbstractData = None
         self.__config : Config = config
     
-    # return data state(model/request/request_data_state)
     def requestFaceFrame(self, face, temperature, threshold, ip, timeout):
         
         if face is None:
@@ -32,8 +31,7 @@ class RequestFace:
     def __packData(self, face, temperature):
         
         _, img_encoded = cv2.imencode('.jpg', face)
-
-        file = {'face':('face.jpg', img_encoded.tobytes(), 'image/jpeg')}
+        file = {'face':img_encoded.tobytes()}
         
         data= {   
         "temperature" : temperature,

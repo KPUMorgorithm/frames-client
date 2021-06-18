@@ -1,6 +1,6 @@
 import time
 import requests
-# import cv2
+import cv2
 class RequestRegister:
 
     # def __init__(self, frame):
@@ -13,9 +13,9 @@ class RequestRegister:
         return self.__unpackResponse(res)
 
     def __packData(self, frame):
-        # _, img_encoded = cv2.imencode('.jpg', frame)
+        _, img_encoded = cv2.imencode('.jpg', frame)
 
-        return {'frame' : frame}
+        return {'frame' : img_encoded.tobytes()}
 
 
     def __requestToServer(self, file, ip, timeout):
@@ -33,9 +33,6 @@ class RequestRegister:
             return None
 
     def __unpackResponse(self, res : requests.Response):
-        if res is None:
-            return None
-
-        responseData = res.json()['data']
-        print(responseData)
-        return "https://naver.com"
+        if res.ok:
+            return True, "http://dowo.pw"+res.text
+        return False, None

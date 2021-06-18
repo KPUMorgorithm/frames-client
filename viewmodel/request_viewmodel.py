@@ -42,24 +42,23 @@ class RequestViewModel(QObject):
         self.running = False
         del self.detectionHelper
 
+    def stopReq(self):
+        self.running = False
+    
+    def startReq(self):
+        self.running = True
+
     @pyqtSlot(np.ndarray)
     def detectFrame(self, frame):
-
         if self.running == False:
             return
 
         requestState = None
         temperature = self.__tp.checkTemperature()
+
         print('temperature = ',temperature)
 
         face = self.detectionHelper.detectFaceFromFrame(frame)
-        
-        # if isMasked:
-        #     requestState = MaskedStateData()
-
-        # elif landmark is None:
-        #     # requestState = UncheckedLandmarkStateData()
-        #     pass
 
         requestState = RequestHelper.requestFaceAndTemperature(self.__config,
                                             face, temperature)
@@ -80,9 +79,8 @@ class RequestViewModel(QObject):
 
         if isinstance(data, UnknownStateData):
             print('Unknown')
-            url = RequestHelper.requestRegister(frame)
-            # if url is not None:
-            #     self.__qrMakeFunc(url)
-            if url is None:
+            ok, url = RequestHelper.requestRegister(frame)
+            if ok:
                 self.running = False
-                self.running = self.__qrMakeFunc("https://naver.com")
+                self.__qrMakeFunc(url)
+                self.running = True

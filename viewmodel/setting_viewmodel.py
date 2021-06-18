@@ -1,3 +1,4 @@
+from typing import Callable
 from client.view.setting_view import SettingWindow
 from PyQt5 import QtWidgets
 
@@ -15,7 +16,7 @@ class SettingViewModel:
 
     view: SettingWindow
 
-    def __init__(self, view : SettingWindow, config : Config):
+    def __init__(self, view : SettingWindow, config : Config, changeTitlebarFunc):
         self.view = view
         self.Btn_fNum = view.getBtnfNum()
         self.Btn_fName = view.getBtnfName()
@@ -24,13 +25,17 @@ class SettingViewModel:
         self.LE_fEdit = view.getLEfEdit()
 
         self.__config = config
+        self.changeTitlebarFunc : Callable = changeTitlebarFunc
 
-
-        view.getBtnClose().clicked.connect(lambda: self.view.close())
+        view.getBtnClose().clicked.connect(lambda: self.__eventClose())
         view.getBtnSave().clicked.connect(lambda: self.__eventSaveBtn())
         # str(self.__config.getFacilityNum()
         self.__initLoadConfig()
         self.view.exec_()
+
+    def __eventClose(self):
+        self.view.close()
+        self.changeTitlebarFunc()
 
     def __eventSaveBtn(self):
         #TODO   정보를 받은 채로 request를 보내야함
