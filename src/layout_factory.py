@@ -27,8 +27,8 @@ class LayoutFactory(metaclass = SingletonInstane):
     def __init__(self):
         self.vd = Video()
         self.vd.start()
-        # self.tp = TemperatureAdapter()
-        self.tp=None
+        self.tp = TemperatureAdapter()
+        # self.tp=None
         self.config = Config("config")
 
         print("LayoutFactory 생성됨(싱글톤 확인용)")
@@ -43,8 +43,9 @@ class LayoutFactory(metaclass = SingletonInstane):
         
     def makeTitleBarModule(self, parent, stretch):
         view = TitleBarLayout(parent, stretch)
-        TitleBarViewModel(view, self.makeSettingWindow, self.killFunc, self.config)
-    
+        vm = TitleBarViewModel(view, self.makeSettingWindow, self.killFunc, self.config)
+        self.changeFunc = vm.changeLabel
+
     @classmethod
     def makeQRWindow(cls, url):
         #TODO 위치 조정(클라이언트 가운데로)
@@ -55,7 +56,7 @@ class LayoutFactory(metaclass = SingletonInstane):
     def makeSettingWindow(self):
         #TODO 위치 조정(클라이언트 가운데로)
         view = SettingWindow(QSSPATH)
-        SettingViewModel(view, self.config)
+        SettingViewModel(view, self.config, self.changeFunc)
 
     def killFunc(self):
         self.vd.running=False
