@@ -16,12 +16,12 @@ class RequestHelper:
     
     # return str(url)
     @staticmethod
-    def requestRegister(frame, ip="http://dowo.pw/register", timeout=3):
+    def requestRegister(frame, ip="http://dowo.pw/api/register", timeout=3):
         return RequestRegister().requestRegister(frame, ip, timeout)
 
     # return config state(model/request/request_config_state) 
     @staticmethod
-    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw"):
+    def requestConfig(config, fNum, fName, sIn, sOut, text, timeout=3, ip="http://dowo.pw/device"):
         
         isErr, isFnum, isStateIn = RequestHelper.__checkConfigVar(fNum, fName, sIn, sOut, text)
 
