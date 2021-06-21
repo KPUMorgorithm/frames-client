@@ -20,11 +20,11 @@ class RequestConfig:
         requestState, res = self.__requestToServer(data, ip, timeout)
 
         if requestState is not None:
-            return requestState, res, isStateIn
+            return requestState, res, isStateIn, isFnum
 
         requestState, requestValue = self.__unpackResponse(res)
 
-        return requestState, requestValue, isStateIn
+        return requestState, requestValue, isStateIn, isFnum
 
 
     def __packData(self, isFnum, text, isStateIn):
