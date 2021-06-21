@@ -6,17 +6,30 @@ class SettingWindow(QtWidgets.QDialog):
     def __init__(self, qssPath):
         super().__init__()
         self.setWindowTitle("Settings")
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint| QtCore.Qt.WindowStaysOnTopHint)
         self.initUI()
 
         with open(qssPath,"r") as f:
             self.setStyleSheet(f.read())
-    
+        self.showFullScreen()
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        
+
 
     #/device/facility?deviceId=~~&~~~
     def initUI(self):
+        frame = QtWidgets.QFrame(self)
+        # frame.setParent(self.parent())
+        frame.setBaseSize(500,500)
+        # frame.set
+        qtRec = frame.frameGeometry()
+        qtRec.moveCenter(QtWidgets.QDesktopWidget().geometry().center())
+        qtRec.setX(qtRec.x() - 50)
+        qtRec.setY(qtRec.y() - 100)
+        frame.move(qtRec.topLeft())
 
-        mainVBox = GuiBuilder.makeBoxLayoutIn(self, True)
+
+        mainVBox = GuiBuilder.makeBoxLayoutIn(frame, True)
         facilityGroupBox = GuiBuilder.makeGroupBoxIn(mainVBox)
         facilityVBox = GuiBuilder.makeBoxLayoutIn(facilityGroupBox, True)
         facilitySelectHBox = GuiBuilder.makeBoxLayoutIn(facilityVBox, False)
