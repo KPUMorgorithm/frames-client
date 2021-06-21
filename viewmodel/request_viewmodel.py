@@ -79,8 +79,8 @@ class RequestViewModel(QObject):
 
         if isinstance(data, UnknownStateData):
             print('Unknown')
-            ok, url = RequestHelper.requestRegister(frame)
-            if ok:
-                self.running = False
-                self.__qrMakeFunc(url)
-                self.running = True
+            # ok, url = RequestHelper.requestRegister(frame)
+            # if ok:
+            #     self.running = False
+            #     self.__qrMakeFunc(url)
+            #     self.running = True
