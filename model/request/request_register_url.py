@@ -33,7 +33,7 @@ class RequestRegister:
             return None
 
     def __unpackResponse(self, res : requests.Response):
-        if res in None:
+        if res is None:
             return False, None
         
         if res.ok:
