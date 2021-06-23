@@ -20,11 +20,11 @@ class RequestConfig:
         requestState, res = self.__requestToServer(data, ip, timeout)
 
         if requestState is not None:
-            return requestState, res, isStateIn
+            return requestState, res, isStateIn, isFnum
 
         requestState, requestValue = self.__unpackResponse(res)
 
-        return requestState, requestValue, isStateIn
+        return requestState, requestValue, isStateIn, isFnum
 
 
     def __packData(self, isFnum, text, isStateIn):
@@ -62,7 +62,7 @@ class RequestConfig:
         
         if res.ok:
             #TODO: True False 판별, 3은 bno와 같은 값
-            return State.ACCEPT, 3
+            return State.ACCEPT, responseData
         
         return State.REJECT, None
         

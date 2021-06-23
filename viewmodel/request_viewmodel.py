@@ -1,6 +1,6 @@
 from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 
 from client.view.request_view import RequestLayout
 
@@ -16,6 +16,8 @@ class RequestViewModel(QObject):
 
     LB_text : QtWidgets.QLabel
     GB_labelBox : QtWidgets.QGroupBox
+
+    reqSignal = pyqtSignal(object, object, object)
 
 
     def __init__(self,view: RequestLayout, vd, tp, config, qrMakeFunction):
@@ -38,6 +40,8 @@ class RequestViewModel(QObject):
 
         self.__qrMakeFunc = qrMakeFunction
 
+        self.reqSignal.connect(self.reqState)
+
     def stopRequest(self):
         self.running = False
         del self.detectionHelper
@@ -53,17 +57,22 @@ class RequestViewModel(QObject):
         if self.running == False:
             return
 
-        requestState = None
         temperature = self.__tp.checkTemperature()
 
         print('temperature = ',temperature)
 
         face = self.detectionHelper.detectFaceFromFrame(frame)
 
+        self.reqSignal.emit(face, temperature, frame)
+
+    @pyqtSlot(object, object, object)
+    def reqState(self, face, temperature, frame):
+        requestState = None
         requestState = RequestHelper.requestFaceAndTemperature(self.__config,
                                             face, temperature)
-
+        
         self._updateView(requestState, frame)
+
 
 
     def _updateView(self, data : AbstractData, frame):

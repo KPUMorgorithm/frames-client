@@ -15,6 +15,8 @@ class TemperatureAdapter:
         frame, self.minVal, self.maxVal = getFrame(self.colorMapType)
         self.lock.release()
         rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgbImage = cv2.transpose(rgbImage)
+        rgbImage = cv2.flip(rgbImage, -1)
         return rgbImage
     
     def checkTemperature(self):

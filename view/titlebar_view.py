@@ -9,6 +9,7 @@ class TitleBarLayout(QtWidgets.QHBoxLayout):
 
     LB_fName : QtWidgets.QLabel
     LB_fState : QtWidgets.QLabel
+    LB_fNum : QtWidgets.QLabel
 
     def __init__(self,parent : QtWidgets.QVBoxLayout, stretch, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,14 +17,14 @@ class TitleBarLayout(QtWidgets.QHBoxLayout):
         frame = QtWidgets.QFrame()
         self.addWidget(frame, stretch=8)
         hBox = GuiBuilder.makeBoxLayoutIn(frame,False)
+        
+
+        self.LB_fNum = GuiBuilder.makeLabelIn(hBox,"num")
+        self.LB_fNum.setStyleSheet("font-size: 20px; ")
         self.LB_fName = GuiBuilder.makeLabelIn(hBox,"산학융합관")
         self.LB_fName.setStyleSheet("font-size: 20px; ")
         self.LB_fState = GuiBuilder.makeLabelIn(hBox,"입장")
         self.LB_fState.setStyleSheet("font-size: 20px; ")
-
-        self.Btn_Test = GuiBuilder.makePushButtonIn(
-            self, 1, None, "QR"
-        )
         
         self.Btn_setting = GuiBuilder.makePushButtonIn(
             self, 1, 'client/resource/settings.png', "Setting")
@@ -40,6 +41,3 @@ class TitleBarLayout(QtWidgets.QHBoxLayout):
 
     def getBtnExit(self):
         return self.Btn_exit
-
-    def getBtnQR(self):
-        return self.Btn_Test

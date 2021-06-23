@@ -50,11 +50,11 @@ class Video(QThread):
         tick = 0
         while self.running:  
             ok, frame = self.cam.read()
-            frame = cv2.flip(frame, 1)
+            frame = cv2.flip(frame, 0)
             if ok:
                 self.signal.emit(frame)
             
-            if tick==60:
+            if tick==30:
                 tick=0
                 self.requestSignal.emit(frame)
             else:
