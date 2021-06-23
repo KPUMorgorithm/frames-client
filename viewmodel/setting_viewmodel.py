@@ -45,7 +45,7 @@ class SettingViewModel:
         text = self.LE_fEdit.text()
         # resultState : State = None
 
-        requestState , requestValue, isStateIn = RequestHelper.requestConfig(self.__config, 
+        requestState , requestValue, isStateIn, isFnum = RequestHelper.requestConfig(self.__config, 
             self.Btn_fNum.isChecked(),
             self.Btn_fName.isChecked(),
             self.Btn_sIn.isChecked(),
@@ -57,7 +57,14 @@ class SettingViewModel:
         #상세한거 수정 해야함
         if requestState == State.ACCEPT:
             print(requestValue)
-            self.__config.iniSave(text, int(isStateIn))
+            if isFnum:
+                fNum = int(text)
+                fName= requestValue
+            else:
+                fNum = requestValue
+                fName = text   
+            self.__config.iniSave(fNum,int(isStateIn),fName)
+            self.changeTitlebarFunc()
             self.view.close()
         
         elif requestState == State.REJECT:
@@ -83,4 +90,5 @@ class SettingViewModel:
         
         self.LE_fEdit.setText(str(fNum)) 
 
+        
         self.Btn_fNum.click()
