@@ -34,8 +34,8 @@ class TitleBarViewModel:
         self.view.parent().parent().close()
 
     def changeLabel(self):
+        self.view.LB_fNum.setText("건물 번호: " + str(self.config.getFacilityNum()))
         self.view.LB_fName.setText(self.config.getFacilityName())
-        print("called")
         state = self.config.getState()
         text = "기기를 등록해주세요"
         if state==State.IN:
