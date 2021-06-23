@@ -7,6 +7,21 @@ class AbstractData(metaclass=ABCMeta):
         self.qss = ""
         self.data = ""
 
+class CheckingStateData(AbstractData):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+
+        self.data = "검증 중 입니다..."
+        self.qss = """
+                width: 100%;
+                color: #FFFFFF;
+                background-color: #444c57;
+                font-weight: bold;
+                font-size: 32px;
+                margin: 0;
+                """
+
 class UncheckedLandmarkStateData(AbstractData):
 
     def __init__(self, *args, **kwargs):
