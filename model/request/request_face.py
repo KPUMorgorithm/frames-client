@@ -36,7 +36,7 @@ class RequestFace:
         data= {   
         "temperature" : temperature,
         "facilityNum" : self.__config.getFacilityNum(),
-        "state" : self.__config.getState()
+        "state" : self.__config.getState().value
         }
 
         return file, data
@@ -64,9 +64,17 @@ class RequestFace:
         if res is None:
             return
         
-        responseData = res.json()['data']
+        responseData = res.text
         print(responseData)
-        isMasked, name = responseData[0], responseData[1]
+
+        if res.ok:
+            responseData = res.json()['data']
+            isMasked, name, display = responseData[0], responseData[1], responseData[2]
+        print(f"ismasked:{isMasked} name:{name} display:{display}")
+
+        if display == False:
+            self.__returnState = CheckingStateData()
+            return
 
         if isMasked:
             self.__returnState = MaskedStateData()
