@@ -8,7 +8,7 @@ class RequestHelper:
     @staticmethod
     def requestFaceAndTemperature(config, face, temperature, 
                                     threshold = 30.0, 
-                                    ip='http://192.168.0.30:5000/match',
+                                    ip='http://fcs.dowo.pw/match',
                                     timeout=3):
 
         return RequestFace(config).requestFaceFrame(
@@ -26,7 +26,7 @@ class RequestHelper:
         isErr, isFnum, isStateIn = RequestHelper.__checkConfigVar(fNum, fName, sIn, sOut, text)
 
         if isErr:
-            return State.INPUTERROR, None
+            return State.INPUTERROR, None, None, None
 
         return RequestConfig(config).requestConfig(isFnum,text,isStateIn,timeout,ip)
 
