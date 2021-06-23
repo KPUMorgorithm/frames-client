@@ -54,7 +54,7 @@ class Video(QThread):
             if ok:
                 self.signal.emit(frame)
             
-            if tick==60:
+            if tick==30:
                 tick=0
                 self.requestSignal.emit(frame)
             else:
