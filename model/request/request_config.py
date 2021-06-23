@@ -62,7 +62,7 @@ class RequestConfig:
         
         if res.ok:
             #TODO: True False 판별, 3은 bno와 같은 값
-            return State.ACCEPT, 3
+            return State.ACCEPT, responseData
         
         return State.REJECT, None
         
