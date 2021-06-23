@@ -12,6 +12,8 @@ from client.model.temperature.thermal_adapter import TemperatureAdapter
 
 import numpy as np
 
+import threading
+
 class RequestViewModel(QObject):
 
     LB_text : QtWidgets.QLabel
@@ -38,6 +40,8 @@ class RequestViewModel(QObject):
 
         self.__qrMakeFunc = qrMakeFunction
 
+        self.mu = threading.Lock()
+
     def stopRequest(self):
         self.running = False
         del self.detectionHelper
@@ -53,6 +57,10 @@ class RequestViewModel(QObject):
         if self.running == False:
             return
 
+        threading.Thread(target=self._detectFrame, args=(frame,)).start()
+
+
+    def _detectFrame(self, frame):
         requestState = None
         temperature = self.__tp.checkTemperature()
 
@@ -63,8 +71,9 @@ class RequestViewModel(QObject):
         requestState = RequestHelper.requestFaceAndTemperature(self.__config,
                                             face, temperature)
 
+        self.mu.acquire()
         self._updateView(requestState, frame)
-
+        self.mu.release()
 
     def _updateView(self, data : AbstractData, frame):
 
@@ -79,8 +88,8 @@ class RequestViewModel(QObject):
 
         if isinstance(data, UnknownStateData):
             print('Unknown')
-            # ok, url = RequestHelper.requestRegister(frame)
-            # if ok:
-            #     self.running = False
-            #     self.__qrMakeFunc(url)
-            #     self.running = True
+            ok, url = RequestHelper.requestRegister(frame)
+            if ok:
+                self.running = False
+                self.__qrMakeFunc(url)
+                self.running = True
