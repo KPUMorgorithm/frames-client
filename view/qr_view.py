@@ -18,8 +18,8 @@ class QRWindow(QtWidgets.QDialog):
         frame.setMinimumSize(300,350)
         qtRec = frame.frameGeometry()
         qtRec.moveCenter(QtWidgets.QDesktopWidget().geometry().center())
-        qtRec.setX(qtRec.x() - 50)
-        qtRec.setY(qtRec.y() - 100)
+        qtRec.setX(qtRec.x())
+        qtRec.setY(qtRec.y())
         frame.move(qtRec.topLeft())
 
         mainVBox = GuiBuilder.makeBoxLayoutIn(frame, True)
