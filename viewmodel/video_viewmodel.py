@@ -27,7 +27,8 @@ class VideoViewModel(QObject):
 
     @pyqtSlot(np.ndarray)
     def updateView(self, frame):
-        frame = self.temperatureOnImage(frame.copy())
+        # frame = self.temperatureOnImage(frame.copy())
+        frame = self.temperatureOnImage(frame)
         pixmap = self.__makePixmapBy(frame)
 
         self.pixmapSignal.emit(pixmap)
