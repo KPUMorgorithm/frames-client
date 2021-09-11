@@ -1,7 +1,8 @@
+import threading
 from client.model.request.request_data_state import *
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
-
+from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
+from threading import *
 from client.view.request_view import RequestLayout
 
 from client.model.request.request_helper import RequestHelper
@@ -12,6 +13,7 @@ from client.model.temperature.thermal_adapter import TemperatureAdapter
 
 import numpy as np
 
+
 class RequestViewModel(QObject):
 
     LB_text : QtWidgets.QLabel
@@ -19,13 +21,17 @@ class RequestViewModel(QObject):
 
     reqSignal = pyqtSignal(object, object, object)
 
+    qrSignal = pyqtSignal(str, object, object)
 
-    def __init__(self,view: RequestLayout, vd, tp, config, qrMakeFunction):
+    def __init__(self,view: RequestLayout, vd, tp, config):
         
         super().__init__(view)
         
         self.LB_text = view.getLB_text()
         self.GB_labelBox = view.getGB_labelBox()
+
+        self.doing = False
+        self.mu = threading.Lock()
 
         self.running = True
 
@@ -37,8 +43,6 @@ class RequestViewModel(QObject):
         self.__config = config
 
         self.detectionHelper = DetectionHelper()
-
-        self.__qrMakeFunc = qrMakeFunction
 
         self.reqSignal.connect(self.reqState)
 
@@ -67,29 +71,45 @@ class RequestViewModel(QObject):
 
     @pyqtSlot(object, object, object)
     def reqState(self, face, temperature, frame):
+
+        if self.doing == True:
+            return
+
+        threading.Thread(target=self._reqState, args=(face, temperature, frame)).start()
+
+    def _reqState(self, face, temperature, frame):
+
+        self.mu.acquire()
+        self.doing = True        
+        self.mu.release()
+
+
         requestState = None
         requestState = RequestHelper.requestFaceAndTemperature(self.__config,
                                             face, temperature)
         
-        self._updateView(requestState, frame)
-
-
-
-    def _updateView(self, data : AbstractData, frame):
-
-        if data is None:
+        
+        if requestState is None:
             print("request None")
+            self.doing = False 
             return
     
         print("update")
-        print(data.data)        
-        self.GB_labelBox.setStyleSheet(data.qss)
-        self.LB_text.setText(data.data)
+        print(requestState.data)        
+        self.GB_labelBox.setStyleSheet(requestState.qss)
+        self.LB_text.setText(requestState.data)
 
-        if isinstance(data, UnknownStateData):
+        if isinstance(requestState, UnknownStateData):
             print('Unknown')
             ok, url = RequestHelper.requestRegister(frame)
             if ok:
                 self.running = False
-                self.__qrMakeFunc(url)
+                self.qrSignal.emit(url, self.startReq, self.stopReq)
                 self.running = True
+
+
+        self.mu.acquire()
+        self.doing = False
+        self.mu.release()
+
+        
