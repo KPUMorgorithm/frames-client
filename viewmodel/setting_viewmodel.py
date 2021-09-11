@@ -63,6 +63,8 @@ class SettingViewModel:
             else:
                 fNum = requestValue
                 fName = text   
+
+            isStateIn = self.Btn_sIn.isChecked()
             self.__config.iniSave(fNum,int(isStateIn),fName)
             self.changeTitlebarFunc()
             self.view.close()

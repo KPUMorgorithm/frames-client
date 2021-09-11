@@ -122,14 +122,16 @@ def getFrame(colorMapType):
     #     tiff_frame += 1
     #Cannot you cv2.resize on raspberry pi 3b+. Not enough processing power.
     #data = cv2.resize(data[:,:], (640, 480))
-    minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(data)
+    w,h = data.shape[:2]
+    # data = data[0:w,20:h-20]
+    minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(data[5:w-5,15:h-15])
     img = cv2.LUT(raw_to_8bit(data), generate_colour_map(colorMapType))
     #display_temperature only works if cv2.resize is used
     #display_temperatureK(img, minVal, minLoc, (255, 0, 0)) #displays min temp at min temp location on image
     #display_temperatureK(img, maxVal, maxLoc, (0, 0, 255)) #displays max temp at max temp location on image
     #display_temperatureK(img, minVal, (10,55), (255, 0, 0)) #display in top left corner the min temp
     #display_temperatureK(img, maxVal, (10,25), (0, 0, 255)) #display in top left corner the max temp
-    return img, minVal, maxVal
+    return img[5:w-5,15:h-15], minVal, maxVal
 
 def startStream():
   ctx = POINTER(uvc_context)()

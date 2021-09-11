@@ -23,22 +23,23 @@ class RequestConfig:
             return requestState, res, isStateIn, isFnum
 
         requestState, requestValue = self.__unpackResponse(res)
-
+        
         return requestState, requestValue, isStateIn, isFnum
 
 
     def __packData(self, isFnum, text, isStateIn):
+
         if isFnum:
             return { 
                 "deviceId" : self.__config.getUUID(),
                 "bno" : int(text),
-                "state" : bool(isStateIn)
+                "state" : isStateIn
             }
         else:
             return {
                 "deviceId" : self.__config.getUUID(),
                 "facilityName" : text,
-                "state" : bool(isStateIn)
+                "state" : isStateIn
             }
     
     def __requestToServer(self, data, ip, timeout):

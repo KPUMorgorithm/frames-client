@@ -37,5 +37,5 @@ class RequestRegister:
             return False, None
         
         if res.ok:
-            return True, "http://dowo.pw"+res.text
+            return True, "http://eks-clb-861425180.ap-northeast-2.elb.amazonaws.com/"+res.text
         return False, None

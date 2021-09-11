@@ -10,7 +10,7 @@ class QRWindow(QtWidgets.QDialog):
         super().__init__()
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint| QtCore.Qt.WindowStaysOnTopHint)
-
+        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         with open(qssPath,"r") as f:
             self.setStyleSheet(f.read())
 
@@ -26,8 +26,9 @@ class QRWindow(QtWidgets.QDialog):
         
         self.LB_img = GuiBuilder.makeLabelIn(mainVBox,"",QtCore.Qt.AlignCenter)
         self.Btn_close = GuiBuilder.makePushButtonIn(mainVBox,1,None, "닫기")
-        
-        self.showFullScreen()
+        self.Btn_close.clicked.connect(lambda: self.close())
+
+        # self.showFullScreen()
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
     def getLbImg(self):
