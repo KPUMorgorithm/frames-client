@@ -1,7 +1,7 @@
 ## Overview
 
 - 한국산업기술대학교 컴퓨터공학과 2021 캡스톤디자인 프로젝트입니다.  
-- 소개 영상 
+- 소개 영상  
   [![](http://img.youtube.com/vi/X_F54xwaDtw/0.jpg)](https://youtu.be/X_F54xwaDtw?t=0s)   
 
 - Jetson Nano 보드에 카메라와 체온인식 센서, 터치스크린을 장착한 단말기 입니다.  
